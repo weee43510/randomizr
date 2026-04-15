@@ -6,7 +6,17 @@ const getCtx = () => {
   return ctx;
 };
 
+function isSoundEnabled(): boolean {
+  try {
+    const stored = localStorage.getItem("pickr_sound_enabled");
+    return stored === null ? true : JSON.parse(stored);
+  } catch {
+    return true;
+  }
+}
+
 function playTone(freq: number, duration: number, type: OscillatorType = 'sine', volume = 0.15) {
+  if (!isSoundEnabled()) return;
   const c = getCtx();
   const osc = c.createOscillator();
   const gain = c.createGain();

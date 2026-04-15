@@ -1,5 +1,8 @@
-import { Sparkles, Hand, Image, LayoutList, Users, Dice5 } from "lucide-react";
+import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X } from "lucide-react";
 import { sounds } from "@/lib/sounds";
+import SettingsPanel, { useSoundEnabled } from "@/components/SettingsPanel";
+import { APP_VERSION } from "@/lib/version";
+import type { DeviceType } from "@/components/DevicePicker";
 
 const tools = [
   { id: "mystic", label: "AI Mystic", icon: Sparkles },
@@ -17,30 +20,101 @@ interface Props {
   onSelect: (id: ToolId) => void;
   collapsed: boolean;
   onToggle: () => void;
+  deviceType: DeviceType;
+  mobileOpen: boolean;
+  onMobileToggle: () => void;
+  soundEnabled: boolean;
+  onSoundToggle: (v: boolean) => void;
 }
 
-export default function AppSidebar({ active, onSelect, collapsed, onToggle }: Props) {
+export default function AppSidebar({
+  active,
+  onSelect,
+  collapsed,
+  onToggle,
+  deviceType,
+  mobileOpen,
+  onMobileToggle,
+  soundEnabled,
+  onSoundToggle,
+}: Props) {
+  const isMobile = deviceType === "mobile";
+
+  // Mobile: bottom tab bar
+  if (isMobile) {
+    return (
+      <>
+        {/* Mobile hamburger header */}
+        <header className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/30 rounded-none flex items-center justify-between px-4 py-3">
+          <span className="text-neon-cyan font-bold text-lg tracking-tight">Pickr</span>
+          <button onClick={onMobileToggle} className="text-foreground p-1">
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </header>
+
+        {/* Mobile slide-down menu */}
+        {mobileOpen && (
+          <div className="fixed top-14 left-0 right-0 z-40 glass-card border-b border-border/30 rounded-none p-3 space-y-1 animate-fade-in">
+            {tools.map((t) => {
+              const Icon = t.icon;
+              const isActive = active === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    if (soundEnabled) sounds.click();
+                    onSelect(t.id);
+                    onMobileToggle();
+                  }}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-primary/15 text-primary neon-glow-cyan"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                  }`}
+                >
+                  <Icon className="w-5 h-5 shrink-0" />
+                  <span>{t.label}</span>
+                </button>
+              );
+            })}
+            <div className="pt-2 border-t border-border/30">
+              <SettingsPanel soundEnabled={soundEnabled} onSoundToggle={onSoundToggle} />
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // Desktop / Tablet sidebar
+  const isTablet = deviceType === "tablet";
+  const sidebarCollapsed = isTablet || collapsed;
+
   return (
     <aside
       className={`fixed left-0 top-0 h-full z-50 flex flex-col transition-all duration-300 glass-card border-r border-t-0 border-b-0 border-l-0 ${
-        collapsed ? "w-16" : "w-56"
+        sidebarCollapsed ? "w-16" : "w-56"
       }`}
       style={{ borderColor: "hsla(var(--glass-border) / 0.08)" }}
     >
       <div className="flex items-center gap-2 px-4 py-5 border-b border-border/30">
         <button onClick={onToggle} className="text-neon-cyan font-bold text-xl tracking-tight">
-          {collapsed ? "P" : "Pickr"}
+          {sidebarCollapsed ? "P" : "Pickr"}
         </button>
       </div>
 
-      <nav className="flex-1 py-4 space-y-1 px-2">
+      <nav className="flex-1 py-4 space-y-1 px-2 overflow-y-auto">
         {tools.map((t) => {
           const Icon = t.icon;
           const isActive = active === t.id;
           return (
             <button
               key={t.id}
-              onClick={() => { sounds.click(); onSelect(t.id); }}
+              onClick={() => {
+                if (soundEnabled) sounds.click();
+                onSelect(t.id);
+              }}
+              title={sidebarCollapsed ? t.label : undefined}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
                   ? "bg-primary/15 text-primary neon-glow-cyan"
@@ -48,11 +122,20 @@ export default function AppSidebar({ active, onSelect, collapsed, onToggle }: Pr
               }`}
             >
               <Icon className="w-5 h-5 shrink-0" />
-              {!collapsed && <span className="truncate">{t.label}</span>}
+              {!sidebarCollapsed && <span className="truncate">{t.label}</span>}
             </button>
           );
         })}
       </nav>
+
+      <div className="px-2 pb-2 space-y-1 border-t border-border/30 pt-2">
+        {!sidebarCollapsed && (
+          <SettingsPanel soundEnabled={soundEnabled} onSoundToggle={onSoundToggle} />
+        )}
+        <div className="text-center">
+          <span className="text-[10px] text-muted-foreground font-mono">v{APP_VERSION}</span>
+        </div>
+      </div>
     </aside>
   );
 }
