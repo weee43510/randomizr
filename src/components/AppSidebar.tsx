@@ -2,7 +2,7 @@ import { Sparkles, Hand, Image, LayoutList, Users, Dice5 } from "lucide-react";
 import { sounds } from "@/lib/sounds";
 
 const tools = [
-  { id: "mystic", label: "AI Mystic", icon: Crystal },
+  { id: "mystic", label: "AI Mystic", icon: Sparkles },
   { id: "roulette", label: "Finger Roulette", icon: Hand },
   { id: "wheel", label: "Photo Wheel", icon: Image },
   { id: "ranking", label: "Ranking Board", icon: LayoutList },
