@@ -6,6 +6,9 @@ import PhotoWheel from "@/components/tools/PhotoWheel";
 import RankingBoard from "@/components/tools/RankingBoard";
 import TeamSplitter from "@/components/tools/TeamSplitter";
 import CoinDice from "@/components/tools/CoinDice";
+import PageTransition from "@/components/PageTransition";
+import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
+import { loadFromStorage, saveToStorage } from "@/lib/storage";
 
 const toolComponents: Record<ToolId, React.FC> = {
   mystic: AiMystic,
@@ -17,10 +20,25 @@ const toolComponents: Record<ToolId, React.FC> = {
 };
 
 export default function Index() {
+  const [deviceType, setDeviceType] = useState<DeviceType | null>(getStoredDevice);
   const [activeTool, setActiveTool] = useState<ToolId>("mystic");
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(() => loadFromStorage("sound_enabled", true));
+
+  const handleSoundToggle = (v: boolean) => {
+    setSoundEnabled(v);
+    saveToStorage("sound_enabled", v);
+  };
+
+  if (!deviceType) {
+    return <DevicePicker onSelect={setDeviceType} />;
+  }
 
   const ActiveComponent = toolComponents[activeTool];
+  const isMobile = deviceType === "mobile";
+  const isTablet = deviceType === "tablet";
+  const sidebarCollapsed = isTablet || collapsed;
 
   return (
     <div className="gradient-bg-animated min-h-screen">
@@ -29,12 +47,25 @@ export default function Index() {
         onSelect={setActiveTool}
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}
+        deviceType={deviceType}
+        mobileOpen={mobileOpen}
+        onMobileToggle={() => setMobileOpen(!mobileOpen)}
+        soundEnabled={soundEnabled}
+        onSoundToggle={handleSoundToggle}
       />
       <main
-        className={`transition-all duration-300 min-h-screen p-6 ${collapsed ? "ml-16" : "ml-56"}`}
+        className={`transition-all duration-300 min-h-screen ${
+          isMobile
+            ? "pt-16 p-4"
+            : sidebarCollapsed
+              ? "ml-16 p-6"
+              : "ml-56 p-6"
+        }`}
       >
         <div className="max-w-5xl mx-auto">
-          <ActiveComponent />
+          <PageTransition activeKey={activeTool}>
+            <ActiveComponent />
+          </PageTransition>
         </div>
       </main>
     </div>
