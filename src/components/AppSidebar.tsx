@@ -1,4 +1,4 @@
-import { Crystal, Hand, Image, LayoutList, Users, Dice5 } from "lucide-react";
+import { Sparkles, Hand, Image, LayoutList, Users, Dice5 } from "lucide-react";
 import { sounds } from "@/lib/sounds";
 
 const tools = [
