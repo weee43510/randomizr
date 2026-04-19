@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sounds, triggerWinHype } from "@/lib/sounds";
+import { sounds } from "@/lib/sounds";
 
 export default function CoinDice() {
   const [coinResult, setCoinResult] = useState<"heads" | "tails" | null>(null);
