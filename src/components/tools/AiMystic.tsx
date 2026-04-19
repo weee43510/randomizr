@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sounds, triggerWinHype } from "@/lib/sounds";
+import { sounds } from "@/lib/sounds";
 
 const answers = [
   "Absolutely, yes! ✨", "Without a doubt.", "My sources say no. 💀",
@@ -41,7 +41,6 @@ export default function AiMystic() {
       }
       setThinking(false);
       sounds.win();
-      triggerWinHype();
     }, 2000);
   };
 

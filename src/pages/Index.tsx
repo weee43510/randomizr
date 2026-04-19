@@ -6,6 +6,9 @@ import PhotoWheel from "@/components/tools/PhotoWheel";
 import RankingBoard from "@/components/tools/RankingBoard";
 import TeamSplitter from "@/components/tools/TeamSplitter";
 import CoinDice from "@/components/tools/CoinDice";
+import TruthOrDare from "@/components/tools/TruthOrDare";
+import BingoCaller from "@/components/tools/BingoCaller";
+import RockPaperScissors from "@/components/tools/RockPaperScissors";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
@@ -17,6 +20,9 @@ const toolComponents: Record<ToolId, React.FC> = {
   ranking: RankingBoard,
   teams: TeamSplitter,
   coinDice: CoinDice,
+  truthDare: TruthOrDare,
+  bingo: BingoCaller,
+  rps: RockPaperScissors,
 };
 
 export default function Index() {
@@ -54,7 +60,7 @@ export default function Index() {
         onSoundToggle={handleSoundToggle}
       />
       <main
-        className={`transition-all duration-300 min-h-screen ${
+        className={`relative z-10 transition-all duration-300 min-h-screen ${
           isMobile
             ? "pt-16 p-4"
             : sidebarCollapsed

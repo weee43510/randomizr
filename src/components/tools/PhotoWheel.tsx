@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { sounds, triggerWinHype } from "@/lib/sounds";
+import { sounds } from "@/lib/sounds";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 
 interface Slice {
@@ -70,7 +70,6 @@ export default function PhotoWheel() {
       setSpinning(false);
       setWinner(slices[winnerIdx].label);
       sounds.win();
-      triggerWinHype();
       if (elimination) {
         const remaining = slices.filter((_, i) => i !== winnerIdx);
         if (remaining.length > 0) save(remaining);

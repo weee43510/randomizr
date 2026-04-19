@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sounds, triggerWinHype } from "@/lib/sounds";
+import { sounds } from "@/lib/sounds";
 
 export default function TeamSplitter() {
   const [input, setInput] = useState("");
@@ -20,7 +20,6 @@ export default function TeamSplitter() {
     names.forEach((name, i) => result[i % teamCount].push(name));
     setTeams(result);
     sounds.win();
-    triggerWinHype();
   };
 
   const TEAM_COLORS = ["hsl(187 94% 43%)", "hsl(263 70% 58%)", "hsl(330 80% 60%)", "hsl(150 80% 50%)", "hsl(40 90% 55%)"];

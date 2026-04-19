@@ -1,6 +1,6 @@
-import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X } from "lucide-react";
+import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X, Flame, Grid3x3, Swords } from "lucide-react";
 import { sounds } from "@/lib/sounds";
-import SettingsPanel, { useSoundEnabled } from "@/components/SettingsPanel";
+import SettingsPanel from "@/components/SettingsPanel";
 import { APP_VERSION } from "@/lib/version";
 import type { DeviceType } from "@/components/DevicePicker";
 
@@ -11,6 +11,9 @@ const tools = [
   { id: "ranking", label: "Ranking Board", icon: LayoutList },
   { id: "teams", label: "Team Splitter", icon: Users },
   { id: "coinDice", label: "Coin & Dice", icon: Dice5 },
+  { id: "truthDare", label: "Truth or Dare", icon: Flame },
+  { id: "bingo", label: "Bingo Caller", icon: Grid3x3 },
+  { id: "rps", label: "Rock Paper Scissors", icon: Swords },
 ] as const;
 
 export type ToolId = (typeof tools)[number]["id"];
@@ -40,21 +43,18 @@ export default function AppSidebar({
 }: Props) {
   const isMobile = deviceType === "mobile";
 
-  // Mobile: bottom tab bar
   if (isMobile) {
     return (
       <>
-        {/* Mobile hamburger header */}
         <header className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/30 rounded-none flex items-center justify-between px-4 py-3">
-          <span className="text-neon-cyan font-bold text-lg tracking-tight">Randomizr</span>
+          <span className="font-display font-bold text-lg tracking-tight gradient-text">Randomizr</span>
           <button onClick={onMobileToggle} className="text-foreground p-1">
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </header>
 
-        {/* Mobile slide-down menu */}
         {mobileOpen && (
-          <div className="fixed top-14 left-0 right-0 z-40 glass-card border-b border-border/30 rounded-none p-3 space-y-1 animate-fade-in">
+          <div className="fixed top-14 left-0 right-0 z-40 glass-card border-b border-border/30 rounded-none p-3 space-y-1 animate-fade-in max-h-[80vh] overflow-y-auto">
             {tools.map((t) => {
               const Icon = t.icon;
               const isActive = active === t.id;
@@ -66,7 +66,7 @@ export default function AppSidebar({
                     onSelect(t.id);
                     onMobileToggle();
                   }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`spring-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${
                     isActive
                       ? "bg-primary/15 text-primary neon-glow-cyan"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
@@ -86,7 +86,6 @@ export default function AppSidebar({
     );
   }
 
-  // Desktop / Tablet sidebar
   const isTablet = deviceType === "tablet";
   const sidebarCollapsed = isTablet || collapsed;
 
@@ -98,7 +97,7 @@ export default function AppSidebar({
       style={{ borderColor: "hsla(var(--glass-border) / 0.08)" }}
     >
       <div className="flex items-center gap-2 px-4 py-5 border-b border-border/30">
-        <button onClick={onToggle} className="spring-btn text-neon-cyan font-bold text-xl tracking-tight">
+        <button onClick={onToggle} className="spring-btn font-display font-bold text-xl tracking-tight gradient-text">
           {sidebarCollapsed ? "R" : "Randomizr"}
         </button>
       </div>
@@ -115,7 +114,7 @@ export default function AppSidebar({
                 onSelect(t.id);
               }}
               title={sidebarCollapsed ? t.label : undefined}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+              className={`spring-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium ${
                 isActive
                   ? "bg-primary/15 text-primary neon-glow-cyan"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/40"

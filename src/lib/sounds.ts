@@ -32,7 +32,7 @@ function playTone(freq: number, duration: number, type: OscillatorType = 'sine',
   osc.stop(c.currentTime + duration);
 }
 
-// Drumroll using filtered noise bursts that build in intensity
+// Gentle drumroll: softer noise bursts, slower ramp, lower overall volume
 let drumrollTimers: number[] = [];
 function stopDrumroll() {
   drumrollTimers.forEach((t) => clearTimeout(t));
@@ -47,22 +47,23 @@ function drumroll(duration = 1500) {
   const tick = () => {
     const elapsed = performance.now() - start;
     if (elapsed >= duration) return;
-    // intensity ramps up
-    const intensity = 0.3 + (elapsed / duration) * 0.7;
-    const interval = 80 - intensity * 50; // gets faster
-    // short noise burst
-    const bufferSize = 0.04 * c.sampleRate;
+    // gentler intensity ramp
+    const progress = elapsed / duration;
+    const intensity = 0.25 + progress * 0.45; // tops out lower
+    const interval = 110 - progress * 45; // slightly slower cadence
+    const bufferSize = 0.035 * c.sampleRate;
     const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
     const src = c.createBufferSource();
     src.buffer = buffer;
     const filter = c.createBiquadFilter();
-    filter.type = "bandpass";
-    filter.frequency.value = 180;
-    filter.Q.value = 1.5;
+    filter.type = "lowpass"; // softer than bandpass
+    filter.frequency.value = 380;
+    filter.Q.value = 0.7;
     const gain = c.createGain();
-    gain.gain.setValueAtTime(0.18 * intensity, c.currentTime);
+    // Much softer overall volume (was 0.18, now 0.07 max)
+    gain.gain.setValueAtTime(0.07 * intensity, c.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
     src.connect(filter);
     filter.connect(gain);
@@ -77,13 +78,12 @@ function drumroll(duration = 1500) {
 
 function tada() {
   if (!isSoundEnabled()) return;
-  // Cheerful ascending fanfare
-  playTone(523, 0.12, 'triangle', 0.18); // C5
-  setTimeout(() => playTone(659, 0.12, 'triangle', 0.18), 90); // E5
-  setTimeout(() => playTone(784, 0.12, 'triangle', 0.18), 180); // G5
+  playTone(523, 0.12, 'triangle', 0.14);
+  setTimeout(() => playTone(659, 0.12, 'triangle', 0.14), 90);
+  setTimeout(() => playTone(784, 0.12, 'triangle', 0.14), 180);
   setTimeout(() => {
-    playTone(1047, 0.45, 'triangle', 0.22); // C6
-    playTone(1319, 0.45, 'sine', 0.14); // E6 harmony
+    playTone(1047, 0.45, 'triangle', 0.18);
+    playTone(1319, 0.45, 'sine', 0.10);
   }, 280);
 }
 
@@ -108,12 +108,11 @@ export const sounds = {
   },
 };
 
-// Trigger a global "winner picked" hype effect: screen shake + neon pulse
+// Subtle screen shake — used only by Finger Roulette now.
 export function triggerWinHype() {
   const root = document.documentElement;
   root.classList.remove("hype-shake");
-  // force reflow
   void root.offsetWidth;
   root.classList.add("hype-shake");
-  window.setTimeout(() => root.classList.remove("hype-shake"), 700);
+  window.setTimeout(() => root.classList.remove("hype-shake"), 450);
 }

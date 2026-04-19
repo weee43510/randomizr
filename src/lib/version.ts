@@ -1,4 +1,4 @@
-export const APP_VERSION = "1.2.0";
+export const APP_VERSION = "2.2.0";
 
 export interface ChangelogEntry {
   version: string;
@@ -7,6 +7,19 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "2.2.0",
+    date: "2026-04-19",
+    notes: [
+      "New game tool: Truth or Dare (50+ prompts)",
+      "New game tool: Bingo Caller with full B-I-N-G-O board",
+      "New game tool: Rock Paper Scissors vs. a learning AI",
+      "Softer drumroll — less aggressive, lower volume",
+      "Screen shake now only on Finger Roulette (and gentler)",
+      "Cooler UI: Space Grotesk display font, gradient headlines, dot-grid backdrop",
+      "New shimmer accent on highlight cards",
+    ],
+  },
   {
     version: "1.2.0",
     date: "2026-04-19",
