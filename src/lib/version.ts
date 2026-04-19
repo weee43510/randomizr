@@ -1,4 +1,4 @@
-export const APP_VERSION = "2.2.0";
+export const APP_VERSION = "3.2.0";
 
 export interface ChangelogEntry {
   version: string;
@@ -7,6 +7,21 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "3.2.0",
+    date: "2026-04-19",
+    notes: [
+      "MAJOR: Bingo fully reworked — play on a real 5×5 card vs 1–5 AI bots, with announcer commentary",
+      "NEW: Would You Rather — 50 dilemmas, no repeats per session",
+      "NEW: Trivia Quiz — 60 questions across 6 categories, scoring + no repeats",
+      "NEW: Sticky Wall — infinite pannable canvas, drop one editable sticky note",
+      "NEW: Notepad — local scratchpad with autosave every 3 seconds",
+      "Truth or Dare now guarantees no repeat cards (truths + dares pools tracked separately)",
+      "Device picker fully revamped — neon orbs, accent-tinted cards, fresh hero",
+      "All tool headers refreshed with mono kicker labels and gradient display titles",
+      "Versioning policy: +0.0.1 visual/UI/bug · +0.1.0 regular update · +1.0.0 major",
+    ],
+  },
   {
     version: "2.2.0",
     date: "2026-04-19",

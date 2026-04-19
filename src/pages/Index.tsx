@@ -7,8 +7,12 @@ import RankingBoard from "@/components/tools/RankingBoard";
 import TeamSplitter from "@/components/tools/TeamSplitter";
 import CoinDice from "@/components/tools/CoinDice";
 import TruthOrDare from "@/components/tools/TruthOrDare";
+import WouldYouRather from "@/components/tools/WouldYouRather";
+import TriviaQuiz from "@/components/tools/TriviaQuiz";
 import BingoCaller from "@/components/tools/BingoCaller";
 import RockPaperScissors from "@/components/tools/RockPaperScissors";
+import StickyCanvas from "@/components/tools/StickyCanvas";
+import Notepad from "@/components/tools/Notepad";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
@@ -21,8 +25,12 @@ const toolComponents: Record<ToolId, React.FC> = {
   teams: TeamSplitter,
   coinDice: CoinDice,
   truthDare: TruthOrDare,
+  wyr: WouldYouRather,
+  trivia: TriviaQuiz,
   bingo: BingoCaller,
   rps: RockPaperScissors,
+  sticky: StickyCanvas,
+  notepad: Notepad,
 };
 
 export default function Index() {

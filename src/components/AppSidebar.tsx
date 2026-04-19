@@ -1,4 +1,4 @@
-import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X, Flame, Grid3x3, Swords } from "lucide-react";
+import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen } from "lucide-react";
 import { sounds } from "@/lib/sounds";
 import SettingsPanel from "@/components/SettingsPanel";
 import { APP_VERSION } from "@/lib/version";
@@ -12,8 +12,12 @@ const tools = [
   { id: "teams", label: "Team Splitter", icon: Users },
   { id: "coinDice", label: "Coin & Dice", icon: Dice5 },
   { id: "truthDare", label: "Truth or Dare", icon: Flame },
-  { id: "bingo", label: "Bingo Caller", icon: Grid3x3 },
+  { id: "wyr", label: "Would You Rather", icon: HelpCircle },
+  { id: "trivia", label: "Trivia Quiz", icon: Brain },
+  { id: "bingo", label: "Bingo", icon: Grid3x3 },
   { id: "rps", label: "Rock Paper Scissors", icon: Swords },
+  { id: "sticky", label: "Sticky Wall", icon: StickyNote },
+  { id: "notepad", label: "Notepad", icon: NotebookPen },
 ] as const;
 
 export type ToolId = (typeof tools)[number]["id"];

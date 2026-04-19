@@ -102,9 +102,10 @@ export default function RockPaperScissors() {
 
   return (
     <div className="max-w-xl mx-auto space-y-6 animate-fade-in">
-      <div className="text-center space-y-1">
-        <h2 className="text-3xl font-bold gradient-text">Rock · Paper · Scissors</h2>
-        <p className="text-sm text-muted-foreground">vs. an AI that learns your patterns 🧠</p>
+      <div className="text-center space-y-2">
+        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">VS · LEARNING AI</p>
+        <h2 className="text-4xl font-display font-black gradient-text">Rock Paper Scissors</h2>
+        <p className="text-xs text-muted-foreground">It studies your patterns. Stay unpredictable.</p>
       </div>
 
       {/* Scoreboard */}
