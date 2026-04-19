@@ -27,7 +27,7 @@ export default function DevicePicker({ onSelect }: Props) {
     <div className="gradient-bg-animated min-h-screen flex items-center justify-center p-6">
       <div className="glass-card-highlight p-8 max-w-md w-full space-y-6 text-center">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold neon-text-cyan">Welcome to Pickr</h1>
+          <h1 className="text-3xl font-bold neon-text-cyan">Welcome to Randomizr</h1>
           <p className="text-sm text-muted-foreground">Choose your device for the best experience</p>
         </div>
 
@@ -38,7 +38,7 @@ export default function DevicePicker({ onSelect }: Props) {
               <button
                 key={d.id}
                 onClick={() => handleSelect(d.id)}
-                className="glass-card flex items-center gap-4 p-4 hover:border-neon-cyan/30 transition-all duration-200 group text-left"
+                className="spring-btn glass-card flex items-center gap-4 p-4 hover:border-neon-cyan/30 group text-left"
               >
                 <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
                   <Icon className="w-6 h-6 text-neon-cyan" />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { sounds } from "@/lib/sounds";
+import { sounds, triggerWinHype } from "@/lib/sounds";
 
 export default function CoinDice() {
   const [coinResult, setCoinResult] = useState<"heads" | "tails" | null>(null);
@@ -13,7 +13,7 @@ export default function CoinDice() {
     if (coinFlipping) return;
     setCoinFlipping(true);
     setCoinResult(null);
-    sounds.flip();
+    sounds.drumroll(1500);
 
     const result = Math.random() < 0.5 ? "heads" : "tails";
     const flips = 6 + Math.floor(Math.random() * 4);
@@ -23,6 +23,7 @@ export default function CoinDice() {
       setCoinResult(result);
       setCoinFlipping(false);
       sounds.win();
+      triggerWinHype();
     }, 1500);
   };
 
@@ -30,23 +31,31 @@ export default function CoinDice() {
     if (diceRolling) return;
     setDiceRolling(true);
     setDiceResult(null);
-    sounds.roll();
+    sounds.drumroll(1700);
 
     const result = Math.floor(Math.random() * 6) + 1;
+    // Container rotation needed to bring each face to the front
+    // (inverse of each face's mounted transform).
     const faceRotations: Record<number, { x: number; y: number }> = {
-      1: { x: 0, y: 0 }, 2: { x: -90, y: 0 }, 3: { x: 0, y: 90 },
-      4: { x: 0, y: -90 }, 5: { x: 90, y: 0 }, 6: { x: 180, y: 0 },
+      1: { x: 0,    y: 0 },
+      2: { x: -90,  y: 0 },
+      3: { x: 0,    y: 90 },
+      4: { x: 0,    y: -90 },
+      5: { x: 90,   y: 0 },
+      6: { x: 180,  y: 0 },
     };
     const target = faceRotations[result];
+    // Add full rotations only (multiples of 360) so we always land on the chosen face.
     setDiceRotation({
-      x: target.x + 720 + Math.floor(Math.random() * 360),
-      y: target.y + 720 + Math.floor(Math.random() * 360),
+      x: target.x + 720,
+      y: target.y + 720,
     });
 
     setTimeout(() => {
       setDiceResult(result);
       setDiceRolling(false);
       sounds.win();
+      triggerWinHype();
     }, 1800);
   };
 
@@ -111,7 +120,7 @@ export default function CoinDice() {
           <button
             onClick={flipCoin}
             disabled={coinFlipping}
-            className="px-6 py-2 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-semibold hover:bg-primary/30 transition-all disabled:opacity-50"
+            className="spring-btn px-6 py-2 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-semibold hover:bg-primary/30 disabled:opacity-50"
           >
             Flip Coin
           </button>
@@ -132,7 +141,6 @@ export default function CoinDice() {
                 transition: diceRolling ? "transform 1.8s cubic-bezier(0.17, 0.67, 0.12, 0.99)" : "none",
               }}
             >
-              {/* All 6 faces */}
               {[1, 2, 3, 4, 5, 6].map((face) => {
                 const transforms: Record<number, string> = {
                   1: "translateZ(56px)",
@@ -177,7 +185,7 @@ export default function CoinDice() {
           <button
             onClick={rollDice}
             disabled={diceRolling}
-            className="px-6 py-2 rounded-lg bg-accent/20 border border-accent/40 text-accent text-sm font-semibold hover:bg-accent/30 transition-all disabled:opacity-50"
+            className="spring-btn px-6 py-2 rounded-lg bg-accent/20 border border-accent/40 text-accent text-sm font-semibold hover:bg-accent/30 disabled:opacity-50"
           >
             Roll Dice
           </button>
