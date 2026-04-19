@@ -26,7 +26,10 @@ export default function TeamSplitter() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
-      <h2 className="text-xl font-bold neon-text-cyan">Smart Team Splitter</h2>
+      <div className="text-center space-y-1">
+        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">BALANCED · FAIR</p>
+        <h2 className="text-3xl font-display font-black gradient-text">Team Splitter</h2>
+      </div>
 
       <textarea
         value={input}

@@ -82,7 +82,10 @@ export default function RankingBoard() {
   return (
     <div className="space-y-4 animate-fade-in">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold neon-text-violet">Ranking Board</h2>
+        <div className="space-y-1">
+          <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">DRAG · DROP · EXPORT</p>
+          <h2 className="text-3xl font-display font-black gradient-text">Ranking Board</h2>
+        </div>
         <button onClick={downloadPng} className="px-4 py-2 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-semibold hover:bg-primary/30 transition-all">
           📥 Download PNG
         </button>

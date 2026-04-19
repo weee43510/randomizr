@@ -86,8 +86,11 @@ export default function FingerRoulette() {
 
   return (
     <div className="flex flex-col items-center gap-4 animate-fade-in">
-      <h2 className="text-xl font-bold neon-text-violet">Finger Roulette</h2>
-      <p className="text-sm text-muted-foreground">Place 2+ fingers on the screen. A random one wins!</p>
+      <div className="text-center space-y-1">
+        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">MULTI-TOUCH · CHAOS</p>
+        <h2 className="text-3xl font-display font-black gradient-text">Finger Roulette</h2>
+      </div>
+      <p className="text-sm text-muted-foreground">Place 2+ fingers on the screen — fate picks one.</p>
 
       <div
         ref={containerRef}

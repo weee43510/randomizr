@@ -92,7 +92,10 @@ export default function PhotoWheel() {
     <div className="flex flex-col lg:flex-row gap-6 animate-fade-in">
       {/* Wheel */}
       <div className="flex-1 flex flex-col items-center gap-4">
-        <h2 className="text-xl font-bold neon-text-cyan">Photo Wheel</h2>
+        <div className="text-center space-y-1">
+          <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">SPIN TO PICK</p>
+          <h2 className="text-3xl font-display font-black gradient-text">Photo Wheel</h2>
+        </div>
 
         <div className="relative w-72 h-72 sm:w-80 sm:h-80">
           {/* Pointer */}

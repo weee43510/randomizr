@@ -65,7 +65,10 @@ export default function CoinDice() {
 
   return (
     <div className="flex flex-col items-center gap-10 animate-fade-in">
-      <h2 className="text-xl font-bold neon-text-violet">Coin & Dice</h2>
+      <div className="text-center space-y-1">
+        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">3D · PHYSICS</p>
+        <h2 className="text-3xl font-display font-black gradient-text">Coin &amp; Dice</h2>
+      </div>
 
       <div className="flex flex-col sm:flex-row gap-12 items-center">
         {/* Coin */}
