@@ -1,10 +1,11 @@
-import { Settings, Volume2, VolumeX, RotateCcw, Info } from "lucide-react";
+import { Settings, Volume2, VolumeX, RotateCcw, Info, Palette, Check } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 import { APP_VERSION, CHANGELOGS } from "@/lib/version";
+import { THEMES, applyTheme, getStoredTheme, type ThemeId } from "@/lib/theme";
 
 export function useSoundEnabled() {
   const [enabled, setEnabled] = useState(() => loadFromStorage("sound_enabled", true));
@@ -20,27 +21,51 @@ interface Props {
   onSoundToggle: (v: boolean) => void;
 }
 
+// Small color swatch preview for each theme
+function ThemeSwatch({ theme }: { theme: typeof THEMES[number] }) {
+  return (
+    <div className="flex gap-1">
+      <span
+        className="w-4 h-4 rounded-full border border-white/20"
+        style={{ background: `hsl(${theme.vars["--neon-cyan"]})` }}
+      />
+      <span
+        className="w-4 h-4 rounded-full border border-white/20"
+        style={{ background: `hsl(${theme.vars["--neon-violet"]})` }}
+      />
+    </div>
+  );
+}
+
 export default function SettingsPanel({ soundEnabled, onSoundToggle }: Props) {
   const [showChangelog, setShowChangelog] = useState(false);
+  const [theme, setTheme] = useState<ThemeId>(getStoredTheme);
 
   const handleResetData = () => {
-    const keys = Object.keys(localStorage).filter((k) => k.startsWith("pickr_"));
+    const keys = Object.keys(localStorage).filter(
+      (k) => k.startsWith("randomizr_") || k.startsWith("pickr_")
+    );
     keys.forEach((k) => localStorage.removeItem(k));
     window.location.reload();
+  };
+
+  const handleThemeChange = (id: ThemeId) => {
+    setTheme(id);
+    applyTheme(id);
   };
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all duration-200">
+        <button className="spring-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40">
           <Settings className="w-5 h-5 shrink-0" />
           <span className="truncate">Settings</span>
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="glass-card border-border/30 w-80 sm:w-96">
+      <SheetContent side="left" className="glass-card border-border/30 w-80 sm:w-96 overflow-y-auto">
         <SheetHeader>
           <SheetTitle className="neon-text-cyan">Settings</SheetTitle>
-          <SheetDescription className="text-muted-foreground text-xs">Configure Pickr preferences</SheetDescription>
+          <SheetDescription className="text-muted-foreground text-xs">Configure Randomizr preferences</SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-6">
@@ -53,13 +78,44 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle }: Props) {
             <Switch checked={soundEnabled} onCheckedChange={onSoundToggle} />
           </div>
 
+          {/* Theme Picker */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <Palette className="w-5 h-5 text-neon-violet" />
+              <span className="text-sm font-medium">Vibe Theme</span>
+            </div>
+            <div className="grid gap-2">
+              {THEMES.map((t) => {
+                const active = theme === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => handleThemeChange(t.id)}
+                    className={`spring-btn glass-card flex items-center justify-between px-3 py-2.5 text-left ${
+                      active ? "border-primary/50 neon-glow-cyan" : ""
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <ThemeSwatch theme={t} />
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{t.label}</p>
+                        <p className="text-[10px] text-muted-foreground">{t.description}</p>
+                      </div>
+                    </div>
+                    {active && <Check className="w-4 h-4 text-primary" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Reset */}
           <div className="space-y-2">
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetData}
-              className="w-full gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
+              className="spring-btn w-full gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
             >
               <RotateCcw className="w-4 h-4" />
               Reset All Data
@@ -76,7 +132,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle }: Props) {
 
             <button
               onClick={() => setShowChangelog(!showChangelog)}
-              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              className="spring-btn flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
             >
               <Info className="w-3.5 h-3.5" />
               {showChangelog ? "Hide" : "Show"} Developer Notes
