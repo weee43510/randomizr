@@ -52,7 +52,7 @@ export default function DevicePicker({ onSelect }: Props) {
           })}
         </div>
 
-        <p className="text-[10px] text-muted-foreground">You can change this later in Settings</p>
+        <p className="text-[10px] text-muted-foreground">The only way to change this is by going into settings and resetting ALL data</p>
       </div>
     </div>
   );
