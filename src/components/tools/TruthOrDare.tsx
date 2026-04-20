@@ -136,6 +136,13 @@ export default function TruthOrDare() {
           {pulling ? "Drawing…" : "PULL A CARD"}
         </button>
         <button
+          onClick={() => setShowAdd((s) => !s)}
+          title="Add custom prompt"
+          className="spring-btn px-4 py-3 rounded-xl bg-accent/20 border border-accent/40 text-accent hover:bg-accent/30"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <button
           onClick={reset}
           title="Reset deck"
           className="spring-btn px-4 py-3 rounded-xl bg-muted/40 border border-border/40 text-muted-foreground hover:text-foreground"
@@ -143,6 +150,36 @@ export default function TruthOrDare() {
           <RotateCcw className="w-4 h-4" />
         </button>
       </div>
+
+      {showAdd && (
+        <div className="glass-card p-3 space-y-2 animate-fade-in">
+          <div className="flex gap-2">
+            {(["truth", "dare"] as const).map((k) => (
+              <button
+                key={k}
+                onClick={() => setAddKind(k)}
+                className={`spring-btn px-3 py-1.5 rounded-lg text-xs font-bold uppercase ${
+                  addKind === k ? "bg-primary/25 text-primary border border-primary/50" : "bg-muted/30 text-muted-foreground border border-border/40"
+                }`}
+              >{k}</button>
+            ))}
+          </div>
+          <textarea
+            value={addText}
+            onChange={(e) => setAddText(e.target.value)}
+            rows={2}
+            placeholder={`Your custom ${addKind}…`}
+            className="w-full px-3 py-2 rounded-lg bg-muted/40 border border-border/50 text-sm outline-none focus:border-primary/50 resize-none"
+          />
+          <button
+            onClick={addCustom}
+            disabled={addText.trim().length < 5}
+            className="spring-btn w-full px-4 py-2 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-bold disabled:opacity-50"
+          >
+            Add to deck
+          </button>
+        </div>
+      )}
     </div>
   );
 }
