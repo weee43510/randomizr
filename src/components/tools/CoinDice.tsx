@@ -1,60 +1,50 @@
 import { useState } from "react";
 import { sounds } from "@/lib/sounds";
+import { celebrate } from "@/lib/confetti";
+
+type Tab = "coin" | "dice";
 
 export default function CoinDice() {
+  const [tab, setTab] = useState<Tab>("coin");
+
+  // Coin
   const [coinResult, setCoinResult] = useState<"heads" | "tails" | null>(null);
   const [coinFlipping, setCoinFlipping] = useState(false);
-  const [diceResult, setDiceResult] = useState<number | null>(null);
-  const [diceRolling, setDiceRolling] = useState(false);
   const [coinRotation, setCoinRotation] = useState(0);
-  const [diceRotation, setDiceRotation] = useState({ x: 0, y: 0 });
+
+  // Dice
+  const [diceCount, setDiceCount] = useState(1);
+  const [diceResults, setDiceResults] = useState<number[]>([]);
+  const [diceRolling, setDiceRolling] = useState(false);
 
   const flipCoin = () => {
     if (coinFlipping) return;
     setCoinFlipping(true);
     setCoinResult(null);
     sounds.drumroll(1500);
-
     const result = Math.random() < 0.5 ? "heads" : "tails";
     const flips = 6 + Math.floor(Math.random() * 4);
-    setCoinRotation(prev => prev + flips * 360 + (result === "tails" ? 180 : 0));
-
+    setCoinRotation((p) => p + flips * 360 + (result === "tails" ? 180 : 0));
     setTimeout(() => {
       setCoinResult(result);
       setCoinFlipping(false);
       sounds.win();
+      celebrate("small");
     }, 1500);
   };
 
   const rollDice = () => {
     if (diceRolling) return;
     setDiceRolling(true);
-    setDiceResult(null);
-    sounds.drumroll(1700);
-
-    const result = Math.floor(Math.random() * 6) + 1;
-    // Container rotation needed to bring each face to the front
-    // (inverse of each face's mounted transform).
-    const faceRotations: Record<number, { x: number; y: number }> = {
-      1: { x: 0,    y: 0 },
-      2: { x: -90,  y: 0 },
-      3: { x: 0,    y: 90 },
-      4: { x: 0,    y: -90 },
-      5: { x: 90,   y: 0 },
-      6: { x: 180,  y: 0 },
-    };
-    const target = faceRotations[result];
-    // Add full rotations only (multiples of 360) so we always land on the chosen face.
-    setDiceRotation({
-      x: target.x + 720,
-      y: target.y + 720,
-    });
-
+    setDiceResults([]);
+    sounds.drumroll(1200);
     setTimeout(() => {
-      setDiceResult(result);
+      const rolls = Array.from({ length: diceCount }, () => Math.floor(Math.random() * 6) + 1);
+      setDiceResults(rolls);
       setDiceRolling(false);
       sounds.win();
-    }, 1800);
+      celebrate(diceCount >= 4 ? "medium" : "small");
+    }, 1200);
   };
 
   const diceFaces: Record<number, number[][]> = {
@@ -63,18 +53,36 @@ export default function CoinDice() {
     6: [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]],
   };
 
+  const total = diceResults.reduce((a, b) => a + b, 0);
+
   return (
-    <div className="flex flex-col items-center gap-10 animate-fade-in">
-      <div className="text-center space-y-1">
-        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">3D · PHYSICS</p>
-        <h2 className="text-3xl font-display font-black gradient-text">Coin &amp; Dice</h2>
+    <div className="max-w-2xl mx-auto space-y-6 animate-fade-in">
+      <header className="text-center space-y-2">
+        <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-muted-foreground">FLIP · ROLL · DECIDE</p>
+        <h2 className="text-4xl font-display font-black gradient-text">Coin & Dice</h2>
+      </header>
+
+      {/* Tabs */}
+      <div className="flex justify-center gap-2">
+        {(["coin", "dice"] as Tab[]).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`spring-btn px-6 py-2 rounded-full text-sm font-semibold uppercase tracking-wider border ${
+              tab === t
+                ? "bg-primary/25 border-primary/60 text-primary neon-glow-cyan"
+                : "bg-muted/30 border-border/40 text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t}
+          </button>
+        ))}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-12 items-center">
-        {/* Coin */}
-        <div className="flex flex-col items-center gap-4">
+      {tab === "coin" && (
+        <div className="flex flex-col items-center gap-5">
           <div
-            className="w-32 h-32 rounded-full cursor-pointer"
+            className="w-36 h-36 rounded-full cursor-pointer"
             style={{ perspective: "600px" }}
             onClick={flipCoin}
           >
@@ -86,9 +94,8 @@ export default function CoinDice() {
                 transition: coinFlipping ? "transform 1.5s cubic-bezier(0.17, 0.67, 0.12, 0.99)" : "none",
               }}
             >
-              {/* Heads */}
               <div
-                className="absolute inset-0 rounded-full flex items-center justify-center text-3xl font-black border-4"
+                className="absolute inset-0 rounded-full flex items-center justify-center text-4xl font-black border-4"
                 style={{
                   backfaceVisibility: "hidden",
                   background: "linear-gradient(135deg, hsl(45 80% 55%), hsl(35 90% 45%))",
@@ -96,12 +103,9 @@ export default function CoinDice() {
                   color: "hsl(35 80% 25%)",
                   boxShadow: "0 0 20px hsla(45 80% 55% / 0.4), inset 0 2px 4px hsla(0 0% 100% / 0.3)",
                 }}
-              >
-                H
-              </div>
-              {/* Tails */}
+              >H</div>
               <div
-                className="absolute inset-0 rounded-full flex items-center justify-center text-3xl font-black border-4"
+                className="absolute inset-0 rounded-full flex items-center justify-center text-4xl font-black border-4"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateX(180deg)",
@@ -110,88 +114,80 @@ export default function CoinDice() {
                   color: "hsl(210 30% 20%)",
                   boxShadow: "0 0 20px hsla(210 30% 55% / 0.4), inset 0 2px 4px hsla(0 0% 100% / 0.3)",
                 }}
-              >
-                T
-              </div>
+              >T</div>
             </div>
           </div>
-          <p className="text-sm font-semibold h-5">
-            {coinResult && <span className="neon-text-cyan animate-scale-in">{coinResult.toUpperCase()}</span>}
+          <p className="text-xl font-display font-black h-8">
+            {coinResult && <span className="neon-text-cyan animate-pop-in">{coinResult.toUpperCase()}</span>}
           </p>
           <button
             onClick={flipCoin}
             disabled={coinFlipping}
-            className="spring-btn px-6 py-2 rounded-lg bg-primary/20 border border-primary/40 text-primary text-sm font-semibold hover:bg-primary/30 disabled:opacity-50"
+            className="spring-btn px-8 py-3 rounded-xl bg-primary/20 border border-primary/40 text-primary font-bold hover:bg-primary/30 disabled:opacity-50 neon-glow-cyan"
           >
-            Flip Coin
+            {coinFlipping ? "Flipping…" : "FLIP COIN"}
           </button>
         </div>
+      )}
 
-        {/* Dice */}
-        <div className="flex flex-col items-center gap-4">
-          <div
-            className="w-28 h-28 cursor-pointer"
-            style={{ perspective: "600px" }}
-            onClick={rollDice}
-          >
-            <div
-              className="w-full h-full relative"
-              style={{
-                transformStyle: "preserve-3d",
-                transform: `rotateX(${diceRotation.x}deg) rotateY(${diceRotation.y}deg)`,
-                transition: diceRolling ? "transform 1.8s cubic-bezier(0.17, 0.67, 0.12, 0.99)" : "none",
-              }}
-            >
-              {[1, 2, 3, 4, 5, 6].map((face) => {
-                const transforms: Record<number, string> = {
-                  1: "translateZ(56px)",
-                  2: "rotateX(90deg) translateZ(56px)",
-                  3: "rotateY(-90deg) translateZ(56px)",
-                  4: "rotateY(90deg) translateZ(56px)",
-                  5: "rotateX(-90deg) translateZ(56px)",
-                  6: "rotateX(180deg) translateZ(56px)",
-                };
-                return (
-                  <div
-                    key={face}
-                    className="absolute inset-0 rounded-xl flex items-center justify-center"
-                    style={{
-                      transform: transforms[face],
-                      backfaceVisibility: "hidden",
-                      background: "linear-gradient(135deg, hsl(230 20% 18%), hsl(230 15% 14%))",
-                      border: "2px solid hsla(var(--neon-violet) / 0.4)",
-                      boxShadow: "0 0 15px hsla(var(--neon-violet) / 0.2)",
-                    }}
-                  >
-                    <div className="grid grid-cols-3 grid-rows-3 gap-1.5 w-16 h-16">
-                      {Array.from({ length: 9 }).map((_, idx) => {
-                        const row = Math.floor(idx / 3);
-                        const col = idx % 3;
-                        const hasDot = diceFaces[face].some(([r, c]) => r === row && c === col);
-                        return (
-                          <div key={idx} className="flex items-center justify-center">
-                            {hasDot && <div className="w-3 h-3 rounded-full bg-foreground" style={{ boxShadow: "0 0 4px hsla(0 0% 100% / 0.5)" }} />}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
+      {tab === "dice" && (
+        <div className="flex flex-col items-center gap-5">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">How many?</span>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setDiceCount(n)}
+                  className={`spring-btn w-9 h-9 rounded-lg text-sm font-bold ${
+                    diceCount === n
+                      ? "bg-primary/25 border border-primary/60 text-primary neon-glow-cyan"
+                      : "bg-muted/30 border border-border/40 text-muted-foreground hover:text-foreground"
+                  }`}
+                >{n}</button>
+              ))}
             </div>
           </div>
-          <p className="text-sm font-semibold h-5">
-            {diceResult && <span className="neon-text-violet animate-scale-in">{diceResult}</span>}
-          </p>
+
+          <div className="flex flex-wrap gap-3 justify-center min-h-[100px] items-center">
+            {(diceResults.length > 0 ? diceResults : Array(diceCount).fill(0)).map((face, i) => (
+              <div
+                key={i}
+                className={`w-20 h-20 rounded-xl border-2 border-neon-violet/40 bg-muted/30 grid grid-cols-3 grid-rows-3 gap-1 p-2 ${
+                  diceRolling ? "animate-spin" : face ? "animate-pop-in" : ""
+                }`}
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                {Array.from({ length: 9 }).map((_, idx) => {
+                  const row = Math.floor(idx / 3);
+                  const col = idx % 3;
+                  const has = face > 0 && diceFaces[face].some(([r, c]) => r === row && c === col);
+                  return (
+                    <div key={idx} className="flex items-center justify-center">
+                      {has && <div className="w-2.5 h-2.5 rounded-full bg-foreground" />}
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+
+          {diceResults.length > 0 && (
+            <p className="text-sm font-mono text-muted-foreground">
+              Rolls: <span className="text-foreground font-bold">{diceResults.join(" + ")}</span>
+              {diceCount > 1 && <> = <span className="neon-text-violet font-black text-lg">{total}</span></>}
+            </p>
+          )}
+
           <button
             onClick={rollDice}
             disabled={diceRolling}
-            className="spring-btn px-6 py-2 rounded-lg bg-accent/20 border border-accent/40 text-accent text-sm font-semibold hover:bg-accent/30 disabled:opacity-50"
+            className="spring-btn px-8 py-3 rounded-xl bg-accent/20 border border-accent/40 text-accent font-bold hover:bg-accent/30 disabled:opacity-50"
           >
-            Roll Dice
+            {diceRolling ? "Rolling…" : `ROLL ${diceCount}`}
           </button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

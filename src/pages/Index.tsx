@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppSidebar, { type ToolId } from "@/components/AppSidebar";
 import AiMystic from "@/components/tools/AiMystic";
 import FingerRoulette from "@/components/tools/FingerRoulette";
@@ -13,9 +13,16 @@ import BingoCaller from "@/components/tools/BingoCaller";
 import RockPaperScissors from "@/components/tools/RockPaperScissors";
 import StickyCanvas from "@/components/tools/StickyCanvas";
 import Notepad from "@/components/tools/Notepad";
+import ReactionTime from "@/components/tools/ReactionTime";
+import MemorySequence from "@/components/tools/MemorySequence";
+import WordChain from "@/components/tools/WordChain";
+import SpeedTap from "@/components/tools/SpeedTap";
+import NumberHunt from "@/components/tools/NumberHunt";
+import EmojiStory from "@/components/tools/EmojiStory";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
+import { useKonamiCode } from "@/lib/easterEggs";
 
 const toolComponents: Record<ToolId, React.FC> = {
   mystic: AiMystic,
@@ -29,6 +36,12 @@ const toolComponents: Record<ToolId, React.FC> = {
   trivia: TriviaQuiz,
   bingo: BingoCaller,
   rps: RockPaperScissors,
+  reaction: ReactionTime,
+  memory: MemorySequence,
+  wordchain: WordChain,
+  speedtap: SpeedTap,
+  numhunt: NumberHunt,
+  emoji: EmojiStory,
   sticky: StickyCanvas,
   notepad: Notepad,
 };
@@ -39,14 +52,16 @@ export default function Index() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => loadFromStorage("sound_enabled", true));
+  const [, setRainbowTick] = useState(0);
 
-  const handleSoundToggle = (v: boolean) => {
-    setSoundEnabled(v);
-    saveToStorage("sound_enabled", v);
-  };
+  // Konami code unlock — listens app-wide
+  useKonamiCode(() => setRainbowTick((t) => t + 1));
+
+  const handleSoundToggle = (v: boolean) => { setSoundEnabled(v); saveToStorage("sound_enabled", v); };
+  const handleDeviceChange = (d: DeviceType) => { setDeviceType(d); saveToStorage("device_type", d); };
 
   if (!deviceType) {
-    return <DevicePicker onSelect={setDeviceType} />;
+    return <DevicePicker onSelect={handleDeviceChange} />;
   }
 
   const ActiveComponent = toolComponents[activeTool];
@@ -66,14 +81,11 @@ export default function Index() {
         onMobileToggle={() => setMobileOpen(!mobileOpen)}
         soundEnabled={soundEnabled}
         onSoundToggle={handleSoundToggle}
+        onDeviceChange={handleDeviceChange}
       />
       <main
         className={`relative z-10 transition-all duration-300 min-h-screen ${
-          isMobile
-            ? "pt-16 p-4"
-            : sidebarCollapsed
-              ? "ml-16 p-6"
-              : "ml-56 p-6"
+          isMobile ? "pt-16 p-4" : sidebarCollapsed ? "ml-16 p-6" : "ml-60 p-6"
         }`}
       >
         <div className="max-w-5xl mx-auto">

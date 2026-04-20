@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { sounds } from "@/lib/sounds";
+import { celebrate, cannons } from "@/lib/confetti";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 
 interface Slice {
@@ -70,6 +71,8 @@ export default function PhotoWheel() {
       setSpinning(false);
       setWinner(slices[winnerIdx].label);
       sounds.win();
+      cannons();
+      celebrate("big");
       if (elimination) {
         const remaining = slices.filter((_, i) => i !== winnerIdx);
         if (remaining.length > 0) save(remaining);

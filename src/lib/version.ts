@@ -1,4 +1,4 @@
-export const APP_VERSION = "3.2.0";
+export const APP_VERSION = "4.0.0";
 
 export interface ChangelogEntry {
   version: string;
@@ -7,6 +7,20 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "4.0.0",
+    date: "2026-04-20",
+    notes: [
+      "💎 MAJOR: 10 themes total — including no-neon Midnight, Daylight & Classic Blue",
+      "🎮 6 NEW games: Reaction Time, Memory Sequence, Word Chain, Speed Tap, Number Hunt, Emoji Story",
+      "🎨 Every existing tool reworked — confetti, multi-modes, animations, polish",
+      "⚙️ Settings rebuilt — bigger theme cards, device switcher, 30-day roadmap (15 stops!)",
+      "🥚 Hidden easter eggs: Konami unlock, version-tap dev mode, /matrix code rain",
+      "🕹️ Settings hides 2 mini-games: Bug Squash & Click The Dot",
+      "🎉 Confetti everywhere on wins (canvas-confetti)",
+      "🔊 Smarter sound system with per-tool variations",
+    ],
+  },
   {
     version: "3.2.0",
     date: "2026-04-19",
@@ -74,4 +88,31 @@ export const CHANGELOGS: ChangelogEntry[] = [
       "Synthesized sound effects via Web Audio API",
     ],
   },
+];
+
+// 30-day roadmap, 1 stop every 2 days = 15 stops
+export interface RoadmapStop {
+  day: number; // 0,2,4...28
+  title: string;
+  detail: string;
+  icon: string;
+  status: "shipped" | "next" | "planned";
+}
+
+export const ROADMAP: RoadmapStop[] = [
+  { day: 0, title: "v4.0 Launch", detail: "10 themes, 6 new games, full rework", icon: "🚀", status: "shipped" },
+  { day: 2, title: "Theme Editor", detail: "Build your own theme with live HSL sliders", icon: "🎨", status: "next" },
+  { day: 4, title: "Daily Streaks", detail: "Login streak counter + bonus rewards", icon: "🔥", status: "planned" },
+  { day: 6, title: "Bingo Tournaments", detail: "Bracket mode vs 8 AI personalities", icon: "🏆", status: "planned" },
+  { day: 8, title: "Sound Studio", detail: "Pick & remix the SFX pack per tool", icon: "🎧", status: "planned" },
+  { day: 10, title: "Custom Trivia Packs", detail: "Import your own Q&A as JSON or paste", icon: "🧠", status: "planned" },
+  { day: 12, title: "Wheel Templates", detail: "One-click presets: lunch, chores, dares", icon: "🎡", status: "planned" },
+  { day: 14, title: "Achievements", detail: "Unlock 30+ badges across all games", icon: "🏅", status: "planned" },
+  { day: 16, title: "Pixel Pet", detail: "A tiny mascot reacts to your activity", icon: "🐣", status: "planned" },
+  { day: 18, title: "Photo Mode", detail: "Export any result as a shareable card", icon: "📸", status: "planned" },
+  { day: 20, title: "Voice Commands", detail: "Spin / Roll / Call by saying it", icon: "🎙️", status: "planned" },
+  { day: 22, title: "Speed Run Mode", detail: "Beat the clock across 5 random tools", icon: "⏱️", status: "planned" },
+  { day: 24, title: "Party Pack", detail: "5 new physical-room party games", icon: "🎉", status: "planned" },
+  { day: 26, title: "AI Game Master", detail: "Optional voice host for Bingo & Trivia", icon: "🤖", status: "planned" },
+  { day: 28, title: "v5.0 Multiplayer", detail: "Real-time rooms — bring everyone in", icon: "🌐", status: "planned" },
 ];
