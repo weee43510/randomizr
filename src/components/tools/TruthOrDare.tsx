@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { sounds } from "@/lib/sounds";
-import { TRUTHS, DARES } from "@/data/truthOrDare";
+import { celebrate } from "@/lib/confetti";
+import { TRUTHS as BASE_TRUTHS, DARES as BASE_DARES } from "@/data/truthOrDare";
 import { pickNoRepeat, resetNoRepeat, noRepeatStats } from "@/lib/noRepeat";
-import { RotateCcw } from "lucide-react";
+import { loadFromStorage, saveToStorage } from "@/lib/storage";
+import { RotateCcw, Plus } from "lucide-react";
 
 type Mode = "truth" | "dare" | "either";
 
@@ -10,10 +12,28 @@ export default function TruthOrDare() {
   const [mode, setMode] = useState<Mode>("either");
   const [pulled, setPulled] = useState<{ kind: "truth" | "dare"; text: string } | null>(null);
   const [pulling, setPulling] = useState(false);
-  const [, setTick] = useState(0);
+  const [tick, setTick] = useState(0);
+  const [showAdd, setShowAdd] = useState(false);
+  const [addKind, setAddKind] = useState<"truth" | "dare">("truth");
+  const [addText, setAddText] = useState("");
+
+  const customTruths = loadFromStorage<string[]>("custom_truths", []);
+  const customDares = loadFromStorage<string[]>("custom_dares", []);
+  const TRUTHS = [...BASE_TRUTHS, ...customTruths];
+  const DARES = [...BASE_DARES, ...customDares];
 
   const truthStats = noRepeatStats("truths", TRUTHS.length);
   const dareStats = noRepeatStats("dares", DARES.length);
+
+  const addCustom = () => {
+    if (addText.trim().length < 5) return;
+    const key = addKind === "truth" ? "custom_truths" : "custom_dares";
+    const list = addKind === "truth" ? customTruths : customDares;
+    saveToStorage(key, [...list, addText.trim()]);
+    setAddText("");
+    setShowAdd(false);
+    setTick((t) => t + 1);
+  };
 
   const pull = () => {
     if (pulling) return;
@@ -30,6 +50,7 @@ export default function TruthOrDare() {
       setPulling(false);
       setTick((t) => t + 1);
       sounds.win();
+      celebrate("small");
     }, 900);
   };
 
