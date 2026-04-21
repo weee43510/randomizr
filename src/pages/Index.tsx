@@ -11,6 +11,7 @@ import WouldYouRather from "@/components/tools/WouldYouRather";
 import TriviaQuiz from "@/components/tools/TriviaQuiz";
 import BingoCaller from "@/components/tools/BingoCaller";
 import RockPaperScissors from "@/components/tools/RockPaperScissors";
+import TicTacToe from "@/components/tools/TicTacToe";
 import StickyCanvas from "@/components/tools/StickyCanvas";
 import Notepad from "@/components/tools/Notepad";
 import ReactionTime from "@/components/tools/ReactionTime";
@@ -19,10 +20,12 @@ import WordChain from "@/components/tools/WordChain";
 import SpeedTap from "@/components/tools/SpeedTap";
 import NumberHunt from "@/components/tools/NumberHunt";
 import EmojiStory from "@/components/tools/EmojiStory";
+import ColorMatch from "@/components/tools/ColorMatch";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 import { useKonamiCode } from "@/lib/easterEggs";
+import { tickDailyStreak } from "@/lib/streak";
 
 const toolComponents: Record<ToolId, React.FC> = {
   mystic: AiMystic,
@@ -36,12 +39,14 @@ const toolComponents: Record<ToolId, React.FC> = {
   trivia: TriviaQuiz,
   bingo: BingoCaller,
   rps: RockPaperScissors,
+  tictactoe: TicTacToe,
   reaction: ReactionTime,
   memory: MemorySequence,
   wordchain: WordChain,
   speedtap: SpeedTap,
   numhunt: NumberHunt,
   emoji: EmojiStory,
+  colormatch: ColorMatch,
   sticky: StickyCanvas,
   notepad: Notepad,
 };
@@ -56,6 +61,9 @@ export default function Index() {
 
   // Konami code unlock — listens app-wide
   useKonamiCode(() => setRainbowTick((t) => t + 1));
+
+  // Daily streak tick on app open
+  useEffect(() => { tickDailyStreak(); }, []);
 
   const handleSoundToggle = (v: boolean) => { setSoundEnabled(v); saveToStorage("sound_enabled", v); };
   const handleDeviceChange = (d: DeviceType) => { setDeviceType(d); saveToStorage("device_type", d); };

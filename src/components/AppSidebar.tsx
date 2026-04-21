@@ -135,14 +135,13 @@ export default function AppSidebar({
       </nav>
 
       <div className="px-2 pb-2 space-y-1 border-t border-border/30 pt-2">
-        {!sidebarCollapsed && (
-          <SettingsPanel
-            soundEnabled={soundEnabled}
-            onSoundToggle={onSoundToggle}
-            deviceType={deviceType}
-            onDeviceChange={onDeviceChange}
-          />
-        )}
+        <SettingsPanel
+          soundEnabled={soundEnabled}
+          onSoundToggle={onSoundToggle}
+          deviceType={deviceType}
+          onDeviceChange={onDeviceChange}
+          compact={sidebarCollapsed}
+        />
         <div className="text-center">
           <span className="text-[10px] text-muted-foreground font-mono">v{APP_VERSION}</span>
         </div>
