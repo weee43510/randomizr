@@ -75,7 +75,7 @@ export default function TicTacToe() {
   useEffect(() => {
     if (!w) return;
     if (w === "X") { setScore((s) => ({ ...s, w: s.w + 1 })); celebrate("medium"); sounds.win(); }
-    else if (w === "O") { setScore((s) => ({ ...s, l: s.l + 1 })); sounds.lose(); }
+    else if (w === "O") { setScore((s) => ({ ...s, l: s.l + 1 })); sounds.tick(); }
     else { setScore((s) => ({ ...s, d: s.d + 1 })); }
   }, [w]);
 

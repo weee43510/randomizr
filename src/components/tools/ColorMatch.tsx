@@ -54,7 +54,7 @@ export default function ColorMatch() {
       newRound();
     } else {
       setScore((s) => Math.max(0, s - 1));
-      sounds.lose();
+      sounds.tick();
       setFlash("bad");
     }
     setTimeout(() => setFlash(null), 120);
