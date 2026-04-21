@@ -10,7 +10,8 @@ export type ThemeId =
   | "forest"
   | "midnight"
   | "daylight"
-  | "classic";
+  | "classic"
+  | "custom";
 
 export interface ThemeDef {
   id: ThemeId;
@@ -407,6 +408,15 @@ export function getStoredTheme(): ThemeId {
 }
 
 export function applyTheme(id: ThemeId) {
+  // Custom theme is handled by ThemeEditor
+  if (id === "custom") {
+    // Defer to custom HSL applier
+    import("@/components/ThemeEditor").then((m) => m.applyCustomFromStorage()).catch(() => {});
+    saveToStorage("theme", id);
+    document.documentElement.removeAttribute("data-no-neon");
+    document.documentElement.removeAttribute("data-light");
+    return;
+  }
   const theme = THEMES.find((t) => t.id === id) ?? THEMES[0];
   const root = document.documentElement;
   Object.entries(theme.vars).forEach(([k, v]) => root.style.setProperty(k, v));

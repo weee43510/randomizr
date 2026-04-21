@@ -4,7 +4,7 @@ import { applyTheme, type ThemeId } from "./theme";
 import { saveToStorage, loadFromStorage } from "./storage";
 import { toast } from "sonner";
 
-const KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
+const KONAMI = ["arrowup","arrowup","arrowdown","arrowdown","arrowleft","arrowright","arrowleft","arrowright","b","a"];
 
 export function isRainbowUnlocked(): boolean {
   return loadFromStorage<boolean>("rainbow_unlocked", false);
@@ -23,7 +23,8 @@ export function useKonamiCode(onUnlock: () => void) {
   useEffect(() => {
     let buf: string[] = [];
     const onKey = (e: KeyboardEvent) => {
-      buf.push(e.key);
+      const key = e.key.toLowerCase();
+      buf.push(key);
       if (buf.length > KONAMI.length) buf = buf.slice(-KONAMI.length);
       if (buf.length === KONAMI.length && buf.every((k, i) => k === KONAMI[i])) {
         if (!isRainbowUnlocked()) {
@@ -32,13 +33,13 @@ export function useKonamiCode(onUnlock: () => void) {
           emojiRain("🌈", 40);
           onUnlock();
         } else {
-          toast("Rainbow already unlocked 🌈");
+          toast("🌈 Rainbow already unlocked — apply it in Settings.");
         }
         buf = [];
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, { capture: true });
+    return () => window.removeEventListener("keydown", onKey, { capture: true } as any);
   }, [onUnlock]);
 }
 

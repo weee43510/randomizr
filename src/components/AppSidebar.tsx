@@ -1,4 +1,4 @@
-import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile } from "lucide-react";
+import { Sparkles, Hand, Image, LayoutList, Users, Dice5, Menu, X, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Settings as SettingsIcon, Hash as HashIcon, Target as TargetIcon } from "lucide-react";
 import { sounds } from "@/lib/sounds";
 import SettingsPanel from "@/components/SettingsPanel";
 import { APP_VERSION } from "@/lib/version";
@@ -16,12 +16,14 @@ const tools = [
   { id: "trivia", label: "Trivia Quiz", icon: Brain, group: "Party" },
   { id: "bingo", label: "Bingo", icon: Grid3x3, group: "Party" },
   { id: "rps", label: "Rock Paper Scissors", icon: Swords, group: "Party" },
+  { id: "tictactoe", label: "Tic-Tac-Toe", icon: HashIcon, group: "Party" },
   { id: "reaction", label: "Reaction Time", icon: Zap, group: "Mini-Games" },
   { id: "memory", label: "Memory Sequence", icon: Layers, group: "Mini-Games" },
   { id: "wordchain", label: "Word Chain", icon: Type, group: "Mini-Games" },
   { id: "speedtap", label: "Speed Tap", icon: MousePointerClick, group: "Mini-Games" },
   { id: "numhunt", label: "Number Hunt", icon: Hash, group: "Mini-Games" },
   { id: "emoji", label: "Emoji Story", icon: Smile, group: "Mini-Games" },
+  { id: "colormatch", label: "Color Match", icon: TargetIcon, group: "Mini-Games" },
   { id: "sticky", label: "Sticky Wall", icon: StickyNote, group: "Tools" },
   { id: "notepad", label: "Notepad", icon: NotebookPen, group: "Tools" },
 ] as const;
@@ -133,14 +135,13 @@ export default function AppSidebar({
       </nav>
 
       <div className="px-2 pb-2 space-y-1 border-t border-border/30 pt-2">
-        {!sidebarCollapsed && (
-          <SettingsPanel
-            soundEnabled={soundEnabled}
-            onSoundToggle={onSoundToggle}
-            deviceType={deviceType}
-            onDeviceChange={onDeviceChange}
-          />
-        )}
+        <SettingsPanel
+          soundEnabled={soundEnabled}
+          onSoundToggle={onSoundToggle}
+          deviceType={deviceType}
+          onDeviceChange={onDeviceChange}
+          compact={sidebarCollapsed}
+        />
         <div className="text-center">
           <span className="text-[10px] text-muted-foreground font-mono">v{APP_VERSION}</span>
         </div>

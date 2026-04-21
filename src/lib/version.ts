@@ -1,4 +1,4 @@
-export const APP_VERSION = "4.0.0";
+export const APP_VERSION = "5.0.0";
 
 export interface ChangelogEntry {
   version: string;
@@ -7,6 +7,22 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "5.0.0",
+    date: "2026-04-21",
+    notes: [
+      "🚀 MAJOR: Settings now opens fullscreen with tabs (Themes · Device · Roadmap · Secrets · About)",
+      "🎨 NEW: Live Theme Editor — tweak primary/accent/bg HSL sliders & save your custom theme",
+      "🔥 NEW: Daily Streak system — opens-in-a-row counter with bonus confetti every 7 days",
+      "🎮 2 NEW games: Tic-Tac-Toe vs AI (3 difficulties) & Color Match reflex grid",
+      "📱 Tablet layout now has a dedicated Settings button in the sidebar",
+      "🔢 Version chip now visible on the Device Picker welcome screen",
+      "🥚 Konami code FIXED — case-insensitive, captured globally (try ↑↑↓↓←→←→ B A)",
+      "🥚 NEW eggs: type 'rainbow' or 'free' anywhere · 7-tap version still unlocks Dev Mode",
+      "🛣️ Roadmap updated — Theme Editor, Daily Streaks & Bingo Tournaments shipped",
+      "💨 Confetti rebuilt — same delight, way less lag (capped ticks + particle counts)",
+    ],
+  },
   {
     version: "4.0.0",
     date: "2026-04-20",
@@ -101,18 +117,18 @@ export interface RoadmapStop {
 
 export const ROADMAP: RoadmapStop[] = [
   { day: 0, title: "v4.0 Launch", detail: "10 themes, 6 new games, full rework", icon: "🚀", status: "shipped" },
-  { day: 2, title: "Theme Editor", detail: "Build your own theme with live HSL sliders", icon: "🎨", status: "next" },
-  { day: 4, title: "Daily Streaks", detail: "Login streak counter + bonus rewards", icon: "🔥", status: "planned" },
-  { day: 6, title: "Bingo Tournaments", detail: "Bracket mode vs 8 AI personalities", icon: "🏆", status: "planned" },
-  { day: 8, title: "Sound Studio", detail: "Pick & remix the SFX pack per tool", icon: "🎧", status: "planned" },
-  { day: 10, title: "Custom Trivia Packs", detail: "Import your own Q&A as JSON or paste", icon: "🧠", status: "planned" },
-  { day: 12, title: "Wheel Templates", detail: "One-click presets: lunch, chores, dares", icon: "🎡", status: "planned" },
+  { day: 2, title: "Theme Editor", detail: "Build your own theme with live HSL sliders", icon: "🎨", status: "shipped" },
+  { day: 4, title: "Daily Streaks", detail: "Login streak counter + bonus rewards", icon: "🔥", status: "shipped" },
+  { day: 6, title: "Tic-Tac-Toe", detail: "Vs AI on 3 difficulties — easy/normal/impossible", icon: "❌", status: "shipped" },
+  { day: 8, title: "Color Match", detail: "Reflex grid: tap the matching swatch fast", icon: "🎯", status: "shipped" },
+  { day: 10, title: "v5.0 Settings Overhaul", detail: "Fullscreen tabs · tablet access · new eggs", icon: "⚙️", status: "shipped" },
+  { day: 12, title: "Bingo Tournaments", detail: "Bracket mode vs 8 AI personalities", icon: "🏆", status: "next" },
   { day: 14, title: "Achievements", detail: "Unlock 30+ badges across all games", icon: "🏅", status: "planned" },
-  { day: 16, title: "Pixel Pet", detail: "A tiny mascot reacts to your activity", icon: "🐣", status: "planned" },
-  { day: 18, title: "Photo Mode", detail: "Export any result as a shareable card", icon: "📸", status: "planned" },
-  { day: 20, title: "Voice Commands", detail: "Spin / Roll / Call by saying it", icon: "🎙️", status: "planned" },
-  { day: 22, title: "Speed Run Mode", detail: "Beat the clock across 5 random tools", icon: "⏱️", status: "planned" },
-  { day: 24, title: "Party Pack", detail: "5 new physical-room party games", icon: "🎉", status: "planned" },
-  { day: 26, title: "AI Game Master", detail: "Optional voice host for Bingo & Trivia", icon: "🤖", status: "planned" },
-  { day: 28, title: "v5.0 Multiplayer", detail: "Real-time rooms — bring everyone in", icon: "🌐", status: "planned" },
+  { day: 16, title: "Sound Studio", detail: "Pick & remix the SFX pack per tool", icon: "🎧", status: "planned" },
+  { day: 18, title: "Custom Trivia Packs", detail: "Import your own Q&A as JSON or paste", icon: "🧠", status: "planned" },
+  { day: 20, title: "Wheel Templates", detail: "One-click presets: lunch, chores, dares", icon: "🎡", status: "planned" },
+  { day: 22, title: "Pixel Pet", detail: "A tiny mascot reacts to your activity", icon: "🐣", status: "planned" },
+  { day: 24, title: "Photo Mode", detail: "Export any result as a shareable card", icon: "📸", status: "planned" },
+  { day: 26, title: "Voice Commands", detail: "Spin / Roll / Call by saying it", icon: "🎙️", status: "planned" },
+  { day: 28, title: "v6.0 Multiplayer", detail: "Real-time rooms — bring everyone in", icon: "🌐", status: "planned" },
 ];
