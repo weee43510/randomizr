@@ -1,4 +1,5 @@
-import { ROADMAP } from "@/lib/version";
+import { useState } from "react";
+import { ROADMAP, ROADMAP_V2 } from "@/lib/version";
 
 const STATUS_STYLES: Record<string, { dot: string; ring: string; label: string }> = {
   shipped: { dot: "bg-neon-green", ring: "ring-neon-green/40", label: "SHIPPED" },
@@ -7,11 +8,28 @@ const STATUS_STYLES: Record<string, { dot: string; ring: string; label: string }
 };
 
 export default function Roadmap() {
+  const [version, setVersion] = useState<"v1" | "v2">("v1");
+  const stops = version === "v1" ? ROADMAP : ROADMAP_V2;
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">30-Day Roadmap</p>
-        <p className="text-[10px] font-mono text-muted-foreground">{ROADMAP.length} stops · scroll →</p>
+        <div className="flex items-center gap-3">
+          <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground">30-Day Roadmap</p>
+          <div className="flex gap-1">
+            {(["v1", "v2"] as const).map((v) => (
+              <button
+                key={v}
+                onClick={() => setVersion(v)}
+                className={`spring-btn text-[10px] font-mono uppercase px-2 py-0.5 rounded ${
+                  version === v ? "bg-primary/20 text-primary" : "bg-muted/30 text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {v === "v1" ? "v1 · Solo" : "v2 · Multiplayer"}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="text-[10px] font-mono text-muted-foreground">{stops.length} stops · scroll →</p>
       </div>
       <div className="relative overflow-x-auto pb-4 -mx-2 px-2">
         {/* Connecting line */}
