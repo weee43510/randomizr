@@ -23,6 +23,9 @@ import SpeedTap from "@/components/tools/SpeedTap";
 import NumberHunt from "@/components/tools/NumberHunt";
 import EmojiStory from "@/components/tools/EmojiStory";
 import ColorMatch from "@/components/tools/ColorMatch";
+import RhythmTap from "@/components/tools/RhythmTap";
+import BalloonPop from "@/components/tools/BalloonPop";
+import MathSprint from "@/components/tools/MathSprint";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
 import PixelPet from "@/components/PixelPet";
@@ -54,6 +57,9 @@ const toolComponents: Record<ToolId, React.FC<any>> = {
   numhunt: NumberHunt,
   emoji: EmojiStory,
   colormatch: ColorMatch,
+  rhythmtap: RhythmTap,
+  balloonpop: BalloonPop,
+  mathsprint: MathSprint,
   sticky: StickyCanvas,
   notepad: Notepad,
 };

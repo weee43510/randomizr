@@ -1,10 +1,11 @@
-import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home } from "lucide-react";
+import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home, Music2, Rocket, Calculator } from "lucide-react";
 
 export type ToolId =
   | "dashboard"
   | "mystic" | "roulette" | "wheel" | "ranking" | "teams" | "coinDice"
   | "truthDare" | "wyr" | "trivia" | "bingo" | "rps" | "tictactoe" | "bingoTourney"
   | "reaction" | "memory" | "wordchain" | "speedtap" | "numhunt" | "emoji" | "colormatch"
+  | "rhythmtap" | "balloonpop" | "mathsprint"
   | "sticky" | "notepad";
 
 export interface ToolMeta {
@@ -30,7 +31,7 @@ export const TOOLS: ToolMeta[] = [
   { id: "wyr", label: "Would You Rather", icon: HelpCircle, group: "Party", color: "hsl(var(--neon-cyan))" },
   { id: "trivia", label: "Trivia Quiz", icon: Brain, group: "Party", color: "hsl(var(--neon-violet))" },
   { id: "bingo", label: "Bingo", icon: Grid3x3, group: "Party", color: "hsl(var(--neon-pink))" },
-  { id: "bingoTourney", label: "Bingo Tournament", icon: Trophy, group: "Party", color: "hsl(40 90% 55%)", isNew: true },
+  { id: "bingoTourney", label: "Bingo Tournament", icon: Trophy, group: "Party", color: "hsl(40 90% 55%)" },
   { id: "rps", label: "Rock Paper Scissors", icon: Swords, group: "Party", color: "hsl(var(--neon-green))" },
   { id: "tictactoe", label: "Tic-Tac-Toe", icon: HashIcon, group: "Party", color: "hsl(var(--neon-cyan))" },
 
@@ -40,7 +41,10 @@ export const TOOLS: ToolMeta[] = [
   { id: "speedtap", label: "Speed Tap", icon: MousePointerClick, group: "Mini-Games", color: "hsl(var(--neon-green))" },
   { id: "numhunt", label: "Number Hunt", icon: Hash, group: "Mini-Games", color: "hsl(40 90% 55%)" },
   { id: "emoji", label: "Emoji Story", icon: Smile, group: "Mini-Games", color: "hsl(var(--neon-violet))" },
-  { id: "colormatch", label: "Color Match", icon: TargetIcon, group: "Mini-Games", color: "hsl(var(--neon-cyan))", isNew: true },
+  { id: "colormatch", label: "Color Match", icon: TargetIcon, group: "Mini-Games", color: "hsl(var(--neon-cyan))" },
+  { id: "rhythmtap", label: "Rhythm Tap", icon: Music2, group: "Mini-Games", color: "hsl(var(--neon-pink))", isNew: true },
+  { id: "balloonpop", label: "Balloon Pop", icon: Rocket, group: "Mini-Games", color: "hsl(var(--neon-green))", isNew: true },
+  { id: "mathsprint", label: "Math Sprint", icon: Calculator, group: "Mini-Games", color: "hsl(var(--neon-violet))", isNew: true },
 
   { id: "sticky", label: "Sticky Wall", icon: StickyNote, group: "Tools", color: "hsl(var(--neon-pink))" },
   { id: "notepad", label: "Notepad", icon: NotebookPen, group: "Tools", color: "hsl(var(--neon-cyan))" },

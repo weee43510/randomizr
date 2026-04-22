@@ -1,4 +1,4 @@
-import { Settings, Volume2, VolumeX, RotateCcw, Info, Palette, Check, Monitor, Tablet, Smartphone, Sparkles, KeyRound, Map, Flame, Wand2, Layers as LayersIcon } from "lucide-react";
+import { Settings, Volume2, VolumeX, RotateCcw, Info, Palette, Check, Monitor, Tablet, Smartphone, Sparkles, KeyRound, Map, Flame, Trophy, Headphones, Brain, MessageCircle, Clock, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,6 +11,11 @@ import type { DeviceType } from "@/components/DevicePicker";
 import Roadmap from "@/components/Roadmap";
 import SettingsMiniGame from "@/components/SettingsMiniGame";
 import ThemeEditor from "@/components/ThemeEditor";
+import AchievementsPanel from "@/components/AchievementsPanel";
+import SoundStudio from "@/components/SoundStudio";
+import CustomTriviaPanel from "@/components/CustomTriviaPanel";
+import SuggestionsPanel from "@/components/SuggestionsPanel";
+import VersionRollbackPanel from "@/components/VersionRollbackPanel";
 import { isRainbowUnlocked, applyRainbowTheme, matrixRainOverlay, isDevMode, setDevMode } from "@/lib/easterEggs";
 import { emojiRain, celebrate } from "@/lib/confetti";
 import { getStreak } from "@/lib/streak";
@@ -21,7 +26,6 @@ interface Props {
   onSoundToggle: (v: boolean) => void;
   deviceType: DeviceType;
   onDeviceChange: (d: DeviceType) => void;
-  /** Render trigger as compact icon-only (for collapsed sidebar) */
   compact?: boolean;
 }
 
@@ -72,12 +76,10 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
   const [matrixInput, setMatrixInput] = useState("");
   const [streak] = useState(getStreak);
 
-  // Rainbow theme animation loop
   useEffect(() => {
     if (theme !== "custom" && !rainbow) return;
     let raf: number;
     const tick = () => {
-      // only animate rainbow when explicitly applied via dev mode/easter egg toggle
       if ((window as any).__rainbow_active) {
         applyRainbowTheme();
         raf = requestAnimationFrame(tick);
@@ -93,7 +95,10 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
   }, []);
 
   const handleResetData = () => {
-    const keys = Object.keys(localStorage).filter((k) => k.startsWith("randomizr_") || k.startsWith("pickr_"));
+    if (!confirm("Wipe ALL saved data? Snapshots are kept.")) return;
+    const keys = Object.keys(localStorage).filter(
+      (k) => (k.startsWith("randomizr_") || k.startsWith("pickr_")) && k !== "randomizr_version_snapshots"
+    );
     keys.forEach((k) => localStorage.removeItem(k));
     window.location.reload();
   };
@@ -140,10 +145,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
   };
 
   const trigger = compact ? (
-    <button
-      title="Settings"
-      className="spring-btn w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40"
-    >
+    <button title="Settings" className="spring-btn w-full flex items-center justify-center px-3 py-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40">
       <Settings className="w-5 h-5" />
     </button>
   ) : (
@@ -162,7 +164,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
             <Settings className="w-7 h-7 text-neon-cyan" /> Settings
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-xs flex items-center gap-3 flex-wrap">
-            <span>Themes · device · roadmap · secrets — make it yours.</span>
+            <span>Themes · device · achievements · sounds · suggestions — make it yours.</span>
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-neon-pink/10 border border-neon-pink/30 text-neon-pink font-mono text-[10px]">
               <Flame className="w-3 h-3" /> {streak.current}-day streak (best {streak.best})
             </span>
@@ -170,10 +172,15 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
         </DialogHeader>
 
         <Tabs defaultValue="themes" className="flex-1 overflow-hidden flex flex-col">
-          <TabsList className="mx-6 mt-3 grid grid-cols-3 sm:grid-cols-5 max-w-3xl">
+          <TabsList className="mx-6 mt-3 flex flex-wrap h-auto justify-start gap-1 bg-muted/30">
             <TabsTrigger value="themes"><Palette className="w-3.5 h-3.5 mr-1.5" />Themes</TabsTrigger>
             <TabsTrigger value="device"><Monitor className="w-3.5 h-3.5 mr-1.5" />Device</TabsTrigger>
+            <TabsTrigger value="achievements"><Trophy className="w-3.5 h-3.5 mr-1.5" />Badges</TabsTrigger>
+            <TabsTrigger value="sounds"><Headphones className="w-3.5 h-3.5 mr-1.5" />Sounds</TabsTrigger>
+            <TabsTrigger value="trivia"><Brain className="w-3.5 h-3.5 mr-1.5" />Trivia</TabsTrigger>
             <TabsTrigger value="roadmap"><Map className="w-3.5 h-3.5 mr-1.5" />Roadmap</TabsTrigger>
+            <TabsTrigger value="suggest"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />Suggest</TabsTrigger>
+            <TabsTrigger value="rollback"><Clock className="w-3.5 h-3.5 mr-1.5" />Rollback</TabsTrigger>
             <TabsTrigger value="secrets"><KeyRound className="w-3.5 h-3.5 mr-1.5" />Secrets</TabsTrigger>
             <TabsTrigger value="about"><Info className="w-3.5 h-3.5 mr-1.5" />About</TabsTrigger>
           </TabsList>
@@ -195,7 +202,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
               <section className="space-y-3">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                    <Palette className="w-3.5 h-3.5" /> Vibe Themes
+                    <Palette className="w-3.5 h-3.5" /> Themes
                   </p>
                   <span className="text-[10px] font-mono text-muted-foreground">{THEMES.length} presets</span>
                 </div>
@@ -208,9 +215,6 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
                   <p className="text-[11px] font-mono text-muted-foreground italic">
                     Hint: try the Konami code (↑↑↓↓←→←→ B A) or type "rainbow" in Secrets.
                   </p>
-                )}
-                {rainbow && (
-                  <p className="text-[11px] font-mono text-neon-pink animate-pulse">🌈 Rainbow unlocked! Type "rainbow" in Secrets to apply.</p>
                 )}
               </section>
 
@@ -244,10 +248,12 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
               <p className="text-[11px] text-muted-foreground">Switching here is non-destructive — your data stays.</p>
             </TabsContent>
 
-            {/* ROADMAP */}
-            <TabsContent value="roadmap" className="max-w-6xl mx-auto">
-              <Roadmap />
-            </TabsContent>
+            <TabsContent value="achievements" className="max-w-5xl mx-auto"><AchievementsPanel /></TabsContent>
+            <TabsContent value="sounds" className="max-w-2xl mx-auto"><SoundStudio /></TabsContent>
+            <TabsContent value="trivia" className="max-w-2xl mx-auto"><CustomTriviaPanel /></TabsContent>
+            <TabsContent value="roadmap" className="max-w-6xl mx-auto"><Roadmap /></TabsContent>
+            <TabsContent value="suggest" className="max-w-2xl mx-auto"><SuggestionsPanel /></TabsContent>
+            <TabsContent value="rollback" className="max-w-2xl mx-auto"><VersionRollbackPanel /></TabsContent>
 
             {/* SECRETS */}
             <TabsContent value="secrets" className="space-y-5 max-w-2xl mx-auto">
@@ -284,7 +290,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
               {devMode && (
                 <div className="glass-card p-3 border border-neon-green/30 bg-neon-green/5">
                   <p className="text-[10px] font-mono uppercase tracking-widest text-neon-green">⚡ Dev Mode Active</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">All secrets unlocked. You broke the wall.</p>
+                  <p className="text-[11px] text-muted-foreground mt-1">All secrets unlocked.</p>
                 </div>
               )}
             </TabsContent>
@@ -298,6 +304,13 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
                 </button>
               </div>
 
+              <div className="glass-card p-4 text-center space-y-1">
+                <p className="text-xs font-mono uppercase tracking-[0.3em] text-muted-foreground inline-flex items-center gap-1.5">
+                  <Heart className="w-3 h-3 text-neon-pink" /> website by Elias
+                </p>
+                <p className="text-[11px] text-muted-foreground">Made with love. Got ideas? Use the Suggest tab!</p>
+              </div>
+
               <Button
                 variant="outline"
                 onClick={handleResetData}
@@ -305,12 +318,9 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
               >
                 <RotateCcw className="w-4 h-4" /> Reset All Data
               </Button>
-              <p className="text-xs text-muted-foreground -mt-3">Wipes all saved lists, scores, themes & devices.</p>
+              <p className="text-xs text-muted-foreground -mt-3">Wipes saved lists, scores, themes & devices. Snapshots are kept.</p>
 
-              <button
-                onClick={() => setShowChangelog(!showChangelog)}
-                className="spring-btn flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
-              >
+              <button onClick={() => setShowChangelog(!showChangelog)} className="spring-btn flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground">
                 <Info className="w-3.5 h-3.5" />
                 {showChangelog ? "Hide" : "Show"} Changelog
               </button>
@@ -337,7 +347,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
 
               <div className="text-center pt-4">
                 <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground inline-flex items-center gap-1.5">
-                  <Sparkles className="w-3 h-3 text-neon-cyan" /> Made with chaos
+                  <Sparkles className="w-3 h-3 text-neon-cyan" /> Made with care
                 </span>
               </div>
             </TabsContent>

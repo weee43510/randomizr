@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { type ToolId, TOOLS } from "@/lib/toolMeta";
 import { getToolUsage, trackToolUsage } from "@/lib/achievements";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
-import { Search, Star, Clock, Sparkles } from "lucide-react";
+import { Search, Star, Clock, Sparkles, Award } from "lucide-react";
+import { getGameOfTheWeek } from "@/lib/gameOfTheWeek";
 
 interface Props {
   onPick: (id: ToolId) => void;
@@ -12,6 +13,7 @@ export default function Dashboard({ onPick }: Props) {
   const [q, setQ] = useState("");
   const [favs, setFavs] = useState<string[]>(() => loadFromStorage("favorites", []));
   const usage = useMemo(() => getToolUsage(), []);
+  const gotw = useMemo(() => getGameOfTheWeek(), []);
 
   const recent = TOOLS
     .map((t) => ({ ...t, count: usage[t.id] || 0 }))
@@ -35,6 +37,8 @@ export default function Dashboard({ onPick }: Props) {
     onPick(id);
   };
 
+  const GotwIcon = gotw.tool.icon;
+
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Hero */}
@@ -44,12 +48,36 @@ export default function Dashboard({ onPick }: Props) {
           <span>Home</span>
         </div>
         <h1 className="font-display font-black text-5xl sm:text-6xl tracking-tight gradient-text leading-none">
-          Pick your chaos.
+          Pick a tool.
         </h1>
         <p className="text-sm text-muted-foreground max-w-xl">
           {TOOLS.length} tools, all in one place. Search, favorite, or grab one of your usuals.
         </p>
       </div>
+
+      {/* Game of the Week */}
+      {q === "" && (
+        <button
+          onClick={() => pick(gotw.tool.id)}
+          className="w-full text-left glass-card-highlight p-5 rounded-2xl flex items-center gap-4 spring-btn group overflow-hidden relative"
+        >
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform"
+            style={{ background: `${gotw.tool.color} / 0.15`, color: gotw.tool.color, border: `1px solid ${gotw.tool.color}` }}
+          >
+            <GotwIcon className="w-8 h-8" />
+          </div>
+          <div className="flex-1 min-w-0 space-y-1">
+            <div className="flex items-center gap-2">
+              <Award className="w-3 h-3 text-neon-pink" />
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-neon-pink">Game of the Week · #{gotw.week}</span>
+            </div>
+            <p className="font-display font-black text-2xl">{gotw.tool.label}</p>
+            <p className="text-xs text-muted-foreground">Featured this week — give it a go!</p>
+          </div>
+          <span className="text-3xl opacity-40 group-hover:opacity-100 transition-opacity">🌟</span>
+        </button>
+      )}
 
       {/* Search */}
       <div className="relative">
@@ -90,7 +118,6 @@ export default function Dashboard({ onPick }: Props) {
         </section>
       )}
 
-      {/* All grouped */}
       {(["Random","Party","Mini-Games","Tools"] as const).map((g) => {
         const inGroup = filtered.filter((t) => t.group === g);
         if (inGroup.length === 0) return null;

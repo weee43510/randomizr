@@ -12,7 +12,7 @@ export interface SoundPackDef {
 export const SOUND_PACKS: SoundPackDef[] = [
   { id: "modern", label: "Modern", emoji: "🔊", desc: "Clean, sine-wave clicks (default)" },
   { id: "retro", label: "Retro 8-bit", emoji: "🎮", desc: "Square waves, low-fi crunch" },
-  { id: "silly", label: "Silly", emoji: "🤪", desc: "Boings, slide-whistle, chaos" },
+  { id: "silly", label: "Silly", emoji: "🤪", desc: "Boings, slide-whistle, cartoon noise" },
   { id: "muted", label: "Muted", emoji: "🔕", desc: "Almost silent (50% volume)" },
 ];
 
