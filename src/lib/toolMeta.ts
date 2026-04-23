@@ -1,7 +1,7 @@
-import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home, Music2, Rocket, Calculator } from "lucide-react";
+import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home, Music2, Rocket, Calculator, Crown } from "lucide-react";
 
 export type ToolId =
-  | "dashboard"
+  | "dashboard" | "season"
   | "mystic" | "roulette" | "wheel" | "ranking" | "teams" | "coinDice"
   | "truthDare" | "wyr" | "trivia" | "bingo" | "rps" | "tictactoe" | "bingoTourney"
   | "reaction" | "memory" | "wordchain" | "speedtap" | "numhunt" | "emoji" | "colormatch"
@@ -12,13 +12,14 @@ export interface ToolMeta {
   id: ToolId;
   label: string;
   icon: any;
-  group: "Home" | "Random" | "Party" | "Mini-Games" | "Tools";
-  color: string; // CSS color
+  group: "Home" | "Random" | "Party" | "Mini-Games" | "Tools" | "Season";
+  color: string;
   isNew?: boolean;
 }
 
 export const TOOLS: ToolMeta[] = [
   { id: "dashboard", label: "Home", icon: Home, group: "Home", color: "hsl(var(--neon-cyan))" },
+  { id: "season", label: "Season Hub", icon: Crown, group: "Season", color: "hsl(45 95% 55%)", isNew: true },
 
   { id: "mystic", label: "AI Mystic", icon: Sparkles, group: "Random", color: "hsl(var(--neon-violet))" },
   { id: "roulette", label: "Finger Roulette", icon: Hand, group: "Random", color: "hsl(var(--neon-pink))" },
@@ -42,12 +43,12 @@ export const TOOLS: ToolMeta[] = [
   { id: "numhunt", label: "Number Hunt", icon: Hash, group: "Mini-Games", color: "hsl(40 90% 55%)" },
   { id: "emoji", label: "Emoji Story", icon: Smile, group: "Mini-Games", color: "hsl(var(--neon-violet))" },
   { id: "colormatch", label: "Color Match", icon: TargetIcon, group: "Mini-Games", color: "hsl(var(--neon-cyan))" },
-  { id: "rhythmtap", label: "Rhythm Tap", icon: Music2, group: "Mini-Games", color: "hsl(var(--neon-pink))", isNew: true },
-  { id: "balloonpop", label: "Balloon Pop", icon: Rocket, group: "Mini-Games", color: "hsl(var(--neon-green))", isNew: true },
-  { id: "mathsprint", label: "Math Sprint", icon: Calculator, group: "Mini-Games", color: "hsl(var(--neon-violet))", isNew: true },
+  { id: "rhythmtap", label: "Rhythm Tap", icon: Music2, group: "Mini-Games", color: "hsl(var(--neon-pink))" },
+  { id: "balloonpop", label: "Balloon Pop", icon: Rocket, group: "Mini-Games", color: "hsl(var(--neon-green))" },
+  { id: "mathsprint", label: "Math Sprint", icon: Calculator, group: "Mini-Games", color: "hsl(var(--neon-violet))" },
 
   { id: "sticky", label: "Sticky Wall", icon: StickyNote, group: "Tools", color: "hsl(var(--neon-pink))" },
   { id: "notepad", label: "Notepad", icon: NotebookPen, group: "Tools", color: "hsl(var(--neon-cyan))" },
 ];
 
-export const TOOL_GROUPS = ["Home", "Random", "Party", "Mini-Games", "Tools"] as const;
+export const TOOL_GROUPS = ["Home", "Season", "Random", "Party", "Mini-Games", "Tools"] as const;
