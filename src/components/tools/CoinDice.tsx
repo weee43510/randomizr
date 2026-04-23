@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { sounds } from "@/lib/sounds";
 import { celebrate } from "@/lib/confetti";
+import { unlock } from "@/lib/achievements";
 
 type Tab = "coin" | "dice";
 
@@ -33,6 +34,7 @@ export default function CoinDice() {
     }, 1500);
   };
 
+  const sixStreak = useRef(0);
   const rollDice = () => {
     if (diceRolling) return;
     setDiceRolling(true);
@@ -44,6 +46,14 @@ export default function CoinDice() {
       setDiceRolling(false);
       sounds.win();
       celebrate(diceCount >= 4 ? "medium" : "small");
+      // Badge triggers
+      if (rolls.includes(6)) unlock("dice_six");
+      if (diceCount === 1 && rolls[0] === 6) {
+        sixStreak.current += 1;
+        if (sixStreak.current >= 3) unlock("dice_six_streak");
+      } else if (diceCount === 1) {
+        sixStreak.current = 0;
+      }
     }, 1200);
   };
 

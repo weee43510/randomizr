@@ -1,4 +1,5 @@
-import { Settings, Volume2, VolumeX, RotateCcw, Info, Palette, Check, Monitor, Tablet, Smartphone, Sparkles, KeyRound, Map, Flame, Trophy, Headphones, Brain, MessageCircle, Clock, Heart } from "lucide-react";
+import { Settings, Volume2, VolumeX, RotateCcw, Info, Palette, Check, Monitor, Tablet, Smartphone, Sparkles, KeyRound, Map, Trophy, Headphones, Brain, MessageCircle, Clock, Heart, Coffee } from "lucide-react";
+import DevNotesPanel from "@/components/DevNotesPanel";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,7 +19,7 @@ import SuggestionsPanel from "@/components/SuggestionsPanel";
 import VersionRollbackPanel from "@/components/VersionRollbackPanel";
 import { isRainbowUnlocked, applyRainbowTheme, matrixRainOverlay, isDevMode, setDevMode } from "@/lib/easterEggs";
 import { emojiRain, celebrate } from "@/lib/confetti";
-import { getStreak } from "@/lib/streak";
+import { unlock } from "@/lib/achievements";
 import { toast } from "sonner";
 
 interface Props {
@@ -74,7 +75,6 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
   const [devMode, setDevModeState] = useState(isDevMode);
   const [rainbow, setRainbow] = useState(isRainbowUnlocked);
   const [matrixInput, setMatrixInput] = useState("");
-  const [streak] = useState(getStreak);
 
   useEffect(() => {
     if (theme !== "custom" && !rainbow) return;
@@ -136,6 +136,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
     } else if (lc.endsWith("party")) {
       celebrate("big");
       toast("🎉 PARTY!");
+      unlock("secret_party");
       setMatrixInput("");
     } else if (lc.endsWith("free")) {
       emojiRain("🦅", 25);
@@ -164,9 +165,9 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
             <Settings className="w-7 h-7 text-neon-cyan" /> Settings
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-xs flex items-center gap-3 flex-wrap">
-            <span>Themes · device · achievements · sounds · suggestions — make it yours.</span>
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-neon-pink/10 border border-neon-pink/30 text-neon-pink font-mono text-[10px]">
-              <Flame className="w-3 h-3" /> {streak.current}-day streak (best {streak.best})
+            <span>Themes · device · achievements · sounds · seasons — make it yours.</span>
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[10px]">
+              <Sparkles className="w-3 h-3" /> Season 1 · The Casino
             </span>
           </DialogDescription>
         </DialogHeader>
@@ -181,6 +182,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
             <TabsTrigger value="roadmap"><Map className="w-3.5 h-3.5 mr-1.5" />Roadmap</TabsTrigger>
             <TabsTrigger value="suggest"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />Suggest</TabsTrigger>
             <TabsTrigger value="rollback"><Clock className="w-3.5 h-3.5 mr-1.5" />Rollback</TabsTrigger>
+            <TabsTrigger value="notes"><Coffee className="w-3.5 h-3.5 mr-1.5" />Dev Notes</TabsTrigger>
             <TabsTrigger value="secrets"><KeyRound className="w-3.5 h-3.5 mr-1.5" />Secrets</TabsTrigger>
             <TabsTrigger value="about"><Info className="w-3.5 h-3.5 mr-1.5" />About</TabsTrigger>
           </TabsList>
@@ -254,6 +256,7 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
             <TabsContent value="roadmap" className="max-w-6xl mx-auto"><Roadmap /></TabsContent>
             <TabsContent value="suggest" className="max-w-2xl mx-auto"><SuggestionsPanel /></TabsContent>
             <TabsContent value="rollback" className="max-w-2xl mx-auto"><VersionRollbackPanel /></TabsContent>
+            <TabsContent value="notes" className="max-w-2xl mx-auto"><DevNotesPanel /></TabsContent>
 
             {/* SECRETS */}
             <TabsContent value="secrets" className="space-y-5 max-w-2xl mx-auto">

@@ -26,47 +26,36 @@ import ColorMatch from "@/components/tools/ColorMatch";
 import RhythmTap from "@/components/tools/RhythmTap";
 import BalloonPop from "@/components/tools/BalloonPop";
 import MathSprint from "@/components/tools/MathSprint";
+import SeasonHub from "@/components/tools/SeasonHub";
+import Blackjack from "@/components/tools/season1/Blackjack";
+import Slots from "@/components/tools/season1/Slots";
+import RouletteRoyale from "@/components/tools/season1/RouletteRoyale";
+import GenericSeasonGame from "@/components/tools/season1/GenericSeasonGame";
 import PageTransition from "@/components/PageTransition";
 import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/DevicePicker";
-import PixelPet from "@/components/PixelPet";
 import VoiceCommandButton from "@/components/VoiceCommandButton";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 import { useKonamiCode } from "@/lib/easterEggs";
-import { tickDailyStreak } from "@/lib/streak";
-import { unlock, trackToolUsage } from "@/lib/achievements";
+import { unlock, trackToolUsage, getToolUsage, getUnlocked } from "@/lib/achievements";
+import { recordToolEvent } from "@/lib/discovery";
+import { checkAutoUnlocks, getCurrentSeason, ALL_SEASONS } from "@/lib/seasons";
 
 const toolComponents: Record<ToolId, React.FC<any>> = {
   dashboard: Dashboard as any,
-  mystic: AiMystic,
-  roulette: FingerRoulette,
-  wheel: PhotoWheel,
-  ranking: RankingBoard,
-  teams: TeamSplitter,
-  coinDice: CoinDice,
-  truthDare: TruthOrDare,
-  wyr: WouldYouRather,
-  trivia: TriviaQuiz,
-  bingo: BingoCaller,
-  bingoTourney: BingoTournament,
-  rps: RockPaperScissors,
-  tictactoe: TicTacToe,
-  reaction: ReactionTime,
-  memory: MemorySequence,
-  wordchain: WordChain,
-  speedtap: SpeedTap,
-  numhunt: NumberHunt,
-  emoji: EmojiStory,
-  colormatch: ColorMatch,
-  rhythmtap: RhythmTap,
-  balloonpop: BalloonPop,
-  mathsprint: MathSprint,
-  sticky: StickyCanvas,
-  notepad: Notepad,
+  season: SeasonHub as any,
+  mystic: AiMystic, roulette: FingerRoulette, wheel: PhotoWheel, ranking: RankingBoard,
+  teams: TeamSplitter, coinDice: CoinDice, truthDare: TruthOrDare, wyr: WouldYouRather,
+  trivia: TriviaQuiz, bingo: BingoCaller, bingoTourney: BingoTournament, rps: RockPaperScissors,
+  tictactoe: TicTacToe, reaction: ReactionTime, memory: MemorySequence, wordchain: WordChain,
+  speedtap: SpeedTap, numhunt: NumberHunt, emoji: EmojiStory, colormatch: ColorMatch,
+  rhythmtap: RhythmTap, balloonpop: BalloonPop, mathsprint: MathSprint,
+  sticky: StickyCanvas, notepad: Notepad,
 };
 
 export default function Index() {
   const [deviceType, setDeviceType] = useState<DeviceType | null>(getStoredDevice);
   const [activeTool, setActiveTool] = useState<ToolId>("dashboard");
+  const [exclusiveGame, setExclusiveGame] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(() => loadFromStorage("sound_enabled", true));
@@ -74,24 +63,73 @@ export default function Index() {
 
   useKonamiCode(() => { setRainbowTick((t) => t + 1); unlock("konami"); });
 
-  useEffect(() => { tickDailyStreak(); unlock("first_visit"); }, []);
+  useEffect(() => {
+    unlock("first_visit");
+    // Auto-unlock season games on boot
+    checkAutoUnlocks({ toolUsage: getToolUsage(), achievements: getUnlocked() });
+  }, []);
 
   const handleSoundToggle = (v: boolean) => { setSoundEnabled(v); saveToStorage("sound_enabled", v); };
   const handleDeviceChange = (d: DeviceType) => { setDeviceType(d); saveToStorage("device_type", d); };
-  const handleSelectTool = (id: ToolId) => { setActiveTool(id); trackToolUsage(id); };
+
+  const handleSelectTool = (id: ToolId) => {
+    setExclusiveGame(null);
+    setActiveTool(id);
+    trackToolUsage(id);
+    recordToolEvent(id);
+    // Re-check auto unlocks
+    setTimeout(() => checkAutoUnlocks({ toolUsage: getToolUsage(), achievements: getUnlocked() }), 100);
+  };
+
+  const handleSelectExclusive = (gameId: string) => {
+    setExclusiveGame(gameId);
+    setActiveTool("season");
+    recordToolEvent(`season:${gameId}`);
+  };
 
   const handleVoice = (cmd: string) => {
     const btns = Array.from(document.querySelectorAll<HTMLButtonElement>("button, [role='button']"));
     const target = btns.find((b) => b.textContent?.toLowerCase().includes(cmd));
     target?.click();
+    unlock("voice_used");
   };
 
   if (!deviceType) return <DevicePicker onSelect={handleDeviceChange} />;
 
-  const ActiveComponent = toolComponents[activeTool];
   const isMobile = deviceType === "mobile";
   const isTablet = deviceType === "tablet";
   const sidebarCollapsed = isTablet || collapsed;
+
+  // Render exclusive season game if one is selected
+  let body: React.ReactNode;
+  if (exclusiveGame) {
+    const season = ALL_SEASONS.find((s) => s.id === getCurrentSeason()?.season.id);
+    const game = season?.exclusiveGames.find((g) => g.id === exclusiveGame);
+    if (game && season) {
+      if (exclusiveGame === "casino_blackjack") body = <Blackjack />;
+      else if (exclusiveGame === "casino_slots") body = <Slots />;
+      else if (exclusiveGame === "casino_roulette") body = <RouletteRoyale />;
+      else body = <GenericSeasonGame game={game} season={season} />;
+      body = (
+        <div className="space-y-3">
+          <button
+            onClick={() => setExclusiveGame(null)}
+            className="spring-btn text-xs font-mono text-muted-foreground hover:text-foreground"
+          >
+            ← Back to Season Hub
+          </button>
+          {body}
+        </div>
+      );
+    }
+  } else if (activeTool === "dashboard") {
+    body = <Dashboard onPick={handleSelectTool} />;
+  } else if (activeTool === "season") {
+    body = <SeasonHub onPickMain={handleSelectTool} onPickExclusive={handleSelectExclusive} />;
+  } else {
+    const ActiveComponent = toolComponents[activeTool];
+    body = <ActiveComponent />;
+  }
 
   return (
     <div className="gradient-bg-animated min-h-screen">
@@ -113,16 +151,9 @@ export default function Index() {
         }`}
       >
         <div className="max-w-5xl mx-auto">
-          <PageTransition activeKey={activeTool}>
-            {activeTool === "dashboard" ? (
-              <Dashboard onPick={handleSelectTool} />
-            ) : (
-              <ActiveComponent />
-            )}
-          </PageTransition>
+          <PageTransition activeKey={`${activeTool}:${exclusiveGame ?? ""}`}>{body}</PageTransition>
         </div>
       </main>
-      <PixelPet />
       <VoiceCommandButton onCommand={handleVoice} />
     </div>
   );
