@@ -1,4 +1,4 @@
-import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home, Music2, Rocket, Calculator, Crown } from "lucide-react";
+import { Sparkles, Hand, Image as ImageIcon, LayoutList, Users, Dice5, Flame, Grid3x3, Swords, HelpCircle, Brain, StickyNote, NotebookPen, Zap, Layers, Type, MousePointerClick, Hash, Smile, Hash as HashIcon, Target as TargetIcon, Trophy, Home, Music2, Rocket, Calculator, Crown, Coins, CircleDot, Spade, Cherry, BrainCircuit, ShoppingBag } from "lucide-react";
 
 export type ToolId =
   | "dashboard" | "season"
@@ -6,20 +6,31 @@ export type ToolId =
   | "truthDare" | "wyr" | "trivia" | "bingo" | "rps" | "tictactoe" | "bingoTourney"
   | "reaction" | "memory" | "wordchain" | "speedtap" | "numhunt" | "emoji" | "colormatch"
   | "rhythmtap" | "balloonpop" | "mathsprint"
-  | "sticky" | "notepad";
+  | "sticky" | "notepad"
+  // Casino core (permanent)
+  | "flipduel" | "neonRoulette" | "dealersBluff" | "chipCascade" | "mindArena"
+  | "chipShop";
 
 export interface ToolMeta {
   id: ToolId;
   label: string;
   icon: any;
-  group: "Home" | "Random" | "Party" | "Mini-Games" | "Tools" | "Season";
+  group: "Home" | "Casino" | "Random" | "Party" | "Mini-Games" | "Tools" | "Season";
   color: string;
   isNew?: boolean;
 }
 
 export const TOOLS: ToolMeta[] = [
   { id: "dashboard", label: "Home", icon: Home, group: "Home", color: "hsl(var(--neon-cyan))" },
-  { id: "season", label: "Season Hub", icon: Crown, group: "Season", color: "hsl(45 95% 55%)", isNew: true },
+
+  // ── 🎰 The Casino — Core hub (always permanent) ──
+  { id: "season",       label: "Season Hub",       icon: Crown,         group: "Casino", color: "hsl(45 95% 55%)", isNew: true },
+  { id: "flipduel",     label: "Flip Duel",        icon: Coins,         group: "Casino", color: "hsl(45 95% 55%)", isNew: true },
+  { id: "neonRoulette", label: "Neon Roulette",    icon: CircleDot,     group: "Casino", color: "hsl(0 80% 55%)",  isNew: true },
+  { id: "dealersBluff", label: "Dealer's Bluff",   icon: Spade,         group: "Casino", color: "hsl(160 70% 45%)",isNew: true },
+  { id: "chipCascade",  label: "Chip Cascade",     icon: Cherry,        group: "Casino", color: "hsl(40 95% 55%)", isNew: true },
+  { id: "mindArena",    label: "Mind Arena",       icon: BrainCircuit,  group: "Casino", color: "hsl(280 80% 60%)",isNew: true },
+  { id: "chipShop",     label: "Chip Shop",        icon: ShoppingBag,   group: "Casino", color: "hsl(45 95% 55%)" },
 
   { id: "mystic", label: "AI Mystic", icon: Sparkles, group: "Random", color: "hsl(var(--neon-violet))" },
   { id: "roulette", label: "Finger Roulette", icon: Hand, group: "Random", color: "hsl(var(--neon-pink))" },
@@ -51,4 +62,4 @@ export const TOOLS: ToolMeta[] = [
   { id: "notepad", label: "Notepad", icon: NotebookPen, group: "Tools", color: "hsl(var(--neon-cyan))" },
 ];
 
-export const TOOL_GROUPS = ["Home", "Season", "Random", "Party", "Mini-Games", "Tools"] as const;
+export const TOOL_GROUPS = ["Home", "Casino", "Random", "Party", "Mini-Games", "Tools"] as const;
