@@ -1,8 +1,23 @@
-export const APP_VERSION = "6.2.0";
+export const APP_VERSION = "7.0.0";
 
 export interface ChangelogEntry { version: string; date: string; notes: string[]; }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "7.0.0",
+    date: "2026-04-24",
+    notes: [
+      "🎰 CASINO REWORK — full premium casino layer with toolbar redesign",
+      "🎲 5 brand-new permanent core games (Flip Duel · Neon Roulette · Dealer's Bluff · Chip Cascade · Mind Arena)",
+      "🎁 12 fresh seasonal exclusives, each with clear unlock-status panels",
+      "🔓 Once unlocked, exclusives stay forever — even after the season ends",
+      "💰 Chips economy: persistent currency, risk/reward in every game",
+      "🛍️ Chip Shop — spend chips on cosmetic themes, FX, sound packs, UI skins",
+      "🎟️ Casino Membership unlocks at 100 chips earned or 3 games played",
+      "🌍 14 daily casino events with unique modifiers (multipliers, visuals, bonus chips)",
+      "🚫 Rollback system fully removed — code & UI cleaned up",
+    ],
+  },
   {
     version: "6.2.0",
     date: "2026-04-23",
@@ -11,7 +26,6 @@ export const CHANGELOGS: ChangelogEntry[] = [
       "🃏 4 Casino games in main lineup + 10 exclusive locked games",
       "⏳ Miss the season? Locked games are gone forever — true FOMO",
       "🔥 Discovery: Trending · 🌟 Hot Now · 🧠 Most Replayed homepage sections",
-      "⏪ Rollback to ANY released version (not just snapshots)",
       "💌 Suggestions box reworked — save, copy, edit, send via email",
       "📔 Developer Notes restored & expanded (10+ entries)",
       "🐣 Pixel Pet removed (sorry Pip — you weren't pulling weight)",
@@ -27,10 +41,8 @@ export const CHANGELOGS: ChangelogEntry[] = [
     notes: [
       "🎮 NEW GAMES: Rhythm Tap, Balloon Pop, Math Sprint",
       "🌟 Game of the Week — featured tool on the homepage",
-      "🐣 Pixel Pet reworked — feed, pet, drag",
       "🪪 Welcome screen — pick your device on first launch",
       "💡 Suggestions box — send ideas to Elias",
-      "↩️ Version rollback (v1) — restore snapshots",
       "🗺️ Roadmap v2 published",
     ],
   },
@@ -89,16 +101,16 @@ export const ROADMAP_V2: RoadmapStop[] = [
   { day: 0, title: "v6.1 Polish", detail: "3 new games + GOTW", icon: "✨", status: "shipped" },
   { day: 2, title: "Game of the Week", detail: "Rotating featured tool", icon: "🌟", status: "shipped" },
   { day: 4, title: "v6.2 Seasons", detail: "Season 1 · The Casino", icon: "🎰", status: "shipped" },
-  { day: 6, title: "Discovery feed", detail: "Trending · Hot · Replayed", icon: "🔥", status: "shipped" },
-  { day: 8, title: "Version rollback v2", detail: "Jump to any release", icon: "⏪", status: "shipped" },
-  { day: 10, title: "Daily Challenges", detail: "One puzzle a day, scored", icon: "📅", status: "next" },
-  { day: 12, title: "Word Games Pack", detail: "Anagrams, Hangman, Wordle-lite", icon: "🔤", status: "planned" },
-  { day: 14, title: "Music Player", detail: "Lo-fi background tunes", icon: "🎵", status: "planned" },
-  { day: 16, title: "Stat Dashboard", detail: "All-time scores & charts", icon: "📊", status: "planned" },
+  { day: 6,  title: "Discovery feed",      detail: "Trending · Hot · Replayed", icon: "🔥", status: "shipped" },
+  { day: 8,  title: "v7.0 Casino Rework",  detail: "5 core games, chips, shop", icon: "🎰", status: "shipped" },
+  { day: 10, title: "Daily Casino Events", detail: "14 modifiers across season", icon: "📅", status: "shipped" },
+  { day: 12, title: "Chip Shop",           detail: "Cosmetics for chips",       icon: "🛍️", status: "shipped" },
+  { day: 14, title: "Casino Membership",   detail: "Season pass cosmetic perks",icon: "🎟️", status: "shipped" },
+  { day: 16, title: "Word Games Pack",     detail: "Anagrams, Hangman, Wordle-lite", icon: "🔤", status: "next" },
   { day: 18, title: "Season 2: Cyber Heist", detail: "Hacker theme + 14 new games", icon: "💾", status: "planned" },
-  { day: 20, title: "Theme Marketplace", detail: "Share custom themes by code", icon: "🎨", status: "planned" },
-  { day: 22, title: "Replay System", detail: "Save & re-watch best runs", icon: "⏪", status: "planned" },
-  { day: 24, title: "Friend Codes", detail: "Share scores by 4-letter code", icon: "🔑", status: "planned" },
-  { day: 26, title: "Live Bingo Rooms", detail: "Up to 16 friends", icon: "📡", status: "planned" },
-  { day: 28, title: "v7.0 Social", detail: "Friends, leaderboards, profiles", icon: "🌍", status: "planned" },
+  { day: 20, title: "Music Player",        detail: "Lo-fi background tunes",    icon: "🎵", status: "planned" },
+  { day: 22, title: "Stat Dashboard",      detail: "All-time scores & charts",  icon: "📊", status: "planned" },
+  { day: 24, title: "Theme Marketplace",   detail: "Share custom themes by code", icon: "🎨", status: "planned" },
+  { day: 26, title: "Replay System",       detail: "Save & re-watch best runs", icon: "⏪", status: "planned" },
+  { day: 28, title: "v8.0 Social",         detail: "Friends, leaderboards, profiles", icon: "🌍", status: "planned" },
 ];

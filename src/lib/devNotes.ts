@@ -40,7 +40,7 @@ export const DEV_NOTES: DevNote[] = [
   {
     date: "2026-04-22",
     title: "v6.1 — Polish day",
-    body: "Three new games (Rhythm Tap, Balloon Pop, Math Sprint), Game of the Week rotates by ISO week, version rollback for power users, suggestions box wired to my email.",
+    body: "Three new games (Rhythm Tap, Balloon Pop, Math Sprint), Game of the Week rotates by ISO week, suggestions box wired to my email.",
     mood: "✨",
   },
   {
