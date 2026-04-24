@@ -62,9 +62,9 @@ export const DEV_NOTES: DevNote[] = [
     mood: "🎯",
   },
   {
-    date: "2026-04-23",
-    title: "Rollback by version",
-    body: "Rebuilt rollback so you can jump to any released version, not just snapshots you remembered to take. Auto-snapshots before each rollback so nothing's lost forever.",
-    mood: "✨",
+    date: "2026-04-24",
+    title: "v7 — Casino Rework",
+    body: "Tore down the seasonal placeholders and built a real casino layer: 5 brand-new core games, 12 fresh exclusives with clear unlock panels, persistent chips, a chip shop for cosmetics, Casino Membership, and 14 daily events. Killed the rollback system — nobody used it and it muddied the codebase.",
+    mood: "🎰",
   },
 ];
