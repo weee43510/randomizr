@@ -27,7 +27,6 @@ import RhythmTap from "@/components/tools/RhythmTap";
 import BalloonPop from "@/components/tools/BalloonPop";
 import MathSprint from "@/components/tools/MathSprint";
 import SeasonHub from "@/components/tools/SeasonHub";
-// Casino core
 import FlipDuel from "@/components/tools/casino/FlipDuel";
 import NeonRoulette from "@/components/tools/casino/NeonRoulette";
 import DealersBluff from "@/components/tools/casino/DealersBluff";
@@ -40,9 +39,14 @@ import DevicePicker, { getStoredDevice, type DeviceType } from "@/components/Dev
 import VoiceCommandButton from "@/components/VoiceCommandButton";
 import { loadFromStorage, saveToStorage } from "@/lib/storage";
 import { useKonamiCode } from "@/lib/easterEggs";
-import { unlock, trackToolUsage } from "@/lib/achievements";
+import { trackToolUsage } from "@/lib/achievements";
 import { recordToolEvent } from "@/lib/discovery";
 import { checkUnlocks, getCurrentSeason, ALL_SEASONS } from "@/lib/seasons";
+import { recordNonCasinoToolUsed, checkTierUnlocks, addTierXP } from "@/lib/casino";
+
+const CASINO_TOOL_IDS = new Set<ToolId>([
+  "season", "flipduel", "neonRoulette", "dealersBluff", "chipCascade", "mindArena", "chipShop",
+]);
 
 const toolComponents: Record<ToolId, React.FC<any>> = {
   dashboard: Dashboard as any,
@@ -54,13 +58,8 @@ const toolComponents: Record<ToolId, React.FC<any>> = {
   speedtap: SpeedTap, numhunt: NumberHunt, emoji: EmojiStory, colormatch: ColorMatch,
   rhythmtap: RhythmTap, balloonpop: BalloonPop, mathsprint: MathSprint,
   sticky: StickyCanvas, notepad: Notepad,
-  // Casino core
-  flipduel: FlipDuel,
-  neonRoulette: NeonRoulette,
-  dealersBluff: DealersBluff,
-  chipCascade: ChipCascade,
-  mindArena: MindArena,
-  chipShop: ChipShop,
+  flipduel: FlipDuel, neonRoulette: NeonRoulette, dealersBluff: DealersBluff,
+  chipCascade: ChipCascade, mindArena: MindArena, chipShop: ChipShop,
 };
 
 export default function Index() {
@@ -72,11 +71,11 @@ export default function Index() {
   const [soundEnabled, setSoundEnabled] = useState(() => loadFromStorage("sound_enabled", true));
   const [, setRainbowTick] = useState(0);
 
-  useKonamiCode(() => { setRainbowTick((t) => t + 1); unlock("konami"); });
+  useKonamiCode(() => { setRainbowTick((t) => t + 1); });
 
   useEffect(() => {
-    unlock("first_visit");
     checkUnlocks();
+    checkTierUnlocks();
   }, []);
 
   const handleSoundToggle = (v: boolean) => { setSoundEnabled(v); saveToStorage("sound_enabled", v); };
@@ -87,7 +86,11 @@ export default function Index() {
     setActiveTool(id);
     trackToolUsage(id);
     recordToolEvent(id);
-    setTimeout(() => checkUnlocks(), 100);
+    if (!CASINO_TOOL_IDS.has(id) && id !== "dashboard") {
+      recordNonCasinoToolUsed(id);
+    }
+    addTierXP(2); // small passive XP for being active
+    setTimeout(() => { checkUnlocks(); checkTierUnlocks(); }, 100);
   };
 
   const handleSelectExclusive = (gameId: string) => {
@@ -100,7 +103,6 @@ export default function Index() {
     const btns = Array.from(document.querySelectorAll<HTMLButtonElement>("button, [role='button']"));
     const target = btns.find((b) => b.textContent?.toLowerCase().includes(cmd));
     target?.click();
-    unlock("voice_used");
   };
 
   if (!deviceType) return <DevicePicker onSelect={handleDeviceChange} />;
@@ -109,13 +111,11 @@ export default function Index() {
   const isTablet = deviceType === "tablet";
   const sidebarCollapsed = isTablet || collapsed;
 
-  // Render exclusive season game if one is selected
   let body: React.ReactNode;
   if (exclusiveGame) {
     const season = ALL_SEASONS.find((s) => s.id === getCurrentSeason()?.season.id);
     const game = season?.exclusiveGames.find((g) => g.id === exclusiveGame);
     if (game && season) {
-      body = <GenericSeasonGame game={game} season={season} />;
       body = (
         <div className="space-y-3">
           <button
@@ -124,7 +124,7 @@ export default function Index() {
           >
             ← Back to Season Hub
           </button>
-          {body}
+          <GenericSeasonGame game={game} season={season} />
         </div>
       );
     }
@@ -150,6 +150,7 @@ export default function Index() {
         soundEnabled={soundEnabled}
         onSoundToggle={handleSoundToggle}
         onDeviceChange={handleDeviceChange}
+        onPickExclusive={handleSelectExclusive}
       />
       <main
         className={`relative z-10 transition-all duration-300 min-h-screen ${

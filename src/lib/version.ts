@@ -1,8 +1,25 @@
-export const APP_VERSION = "7.0.0";
+export const APP_VERSION = "7.1.0";
 
 export interface ChangelogEntry { version: string; date: string; notes: string[]; }
 
 export const CHANGELOGS: ChangelogEntry[] = [
+  {
+    version: "7.1.0",
+    date: "2026-05-01",
+    notes: [
+      "🎁 Chip recovery: daily +50 bonus, free +25 chips every 7 min — never get stuck",
+      "🎟️ Membership reworked into 3 tiers (🥉 Basic · 🥈 Plus · 🥇 Elite) with 10/20/30-level passes",
+      "📊 New Membership tab in Settings with XP bar, levels, claimable rewards",
+      "🛍️ Shop expanded to 23 items + Owned/Equip states + per-category equipping",
+      "📦 New Inventory tab — view, equip, or sell back at 90% refund",
+      "🎮 Seasonal exclusives now interactive — pick → suspense reveal → reward",
+      "⏱️ Live d/h/m countdown + final-day urgency visuals",
+      "🌌 Casino hub ambience: animated glow + drifting particles",
+      "🟣 3 new casino themes: Velvet · Obsidian · Gold",
+      "🧱 Suggestions reworked into a public Wall (post · vote · sort)",
+      "🚫 Achievements temporarily blocked · Roadmap v2 hidden",
+    ],
+  },
   {
     version: "7.0.0",
     date: "2026-04-24",
@@ -96,21 +113,5 @@ export const ROADMAP: RoadmapStop[] = [
   { day: 28, title: "v6.0 Dashboard", detail: "Homepage + 3D picker", icon: "🏠", status: "shipped" },
 ];
 
-// Roadmap v2.0 — mixed bag (NOT all multiplayer).
-export const ROADMAP_V2: RoadmapStop[] = [
-  { day: 0, title: "v6.1 Polish", detail: "3 new games + GOTW", icon: "✨", status: "shipped" },
-  { day: 2, title: "Game of the Week", detail: "Rotating featured tool", icon: "🌟", status: "shipped" },
-  { day: 4, title: "v6.2 Seasons", detail: "Season 1 · The Casino", icon: "🎰", status: "shipped" },
-  { day: 6,  title: "Discovery feed",      detail: "Trending · Hot · Replayed", icon: "🔥", status: "shipped" },
-  { day: 8,  title: "v7.0 Casino Rework",  detail: "5 core games, chips, shop", icon: "🎰", status: "shipped" },
-  { day: 10, title: "Daily Casino Events", detail: "14 modifiers across season", icon: "📅", status: "shipped" },
-  { day: 12, title: "Chip Shop",           detail: "Cosmetics for chips",       icon: "🛍️", status: "shipped" },
-  { day: 14, title: "Casino Membership",   detail: "Season pass cosmetic perks",icon: "🎟️", status: "shipped" },
-  { day: 16, title: "Word Games Pack",     detail: "Anagrams, Hangman, Wordle-lite", icon: "🔤", status: "next" },
-  { day: 18, title: "Season 2: Cyber Heist", detail: "Hacker theme + 14 new games", icon: "💾", status: "planned" },
-  { day: 20, title: "Music Player",        detail: "Lo-fi background tunes",    icon: "🎵", status: "planned" },
-  { day: 22, title: "Stat Dashboard",      detail: "All-time scores & charts",  icon: "📊", status: "planned" },
-  { day: 24, title: "Theme Marketplace",   detail: "Share custom themes by code", icon: "🎨", status: "planned" },
-  { day: 26, title: "Replay System",       detail: "Save & re-watch best runs", icon: "⏪", status: "planned" },
-  { day: 28, title: "v8.0 Social",         detail: "Friends, leaderboards, profiles", icon: "🌍", status: "planned" },
-];
+// Roadmap v2 has been hidden for now.
+export const ROADMAP_V2: RoadmapStop[] = [];
