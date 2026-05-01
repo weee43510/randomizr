@@ -5,6 +5,8 @@ export type ThemeId =
   | "forest" | "midnight" | "daylight" | "classic"
   // v6.2 new themes
   | "inferno" | "glacier" | "sakura" | "honey" | "royal" | "mint" | "carbon"
+  // v7.1 casino themes
+  | "casinoVelvet" | "casinoObsidian" | "casinoGold"
   | "custom";
 
 export interface ThemeDef {
@@ -80,6 +82,11 @@ export const THEMES: ThemeDef[] = [
   mk("royal", "Royal", "Purple × gold · regal", "👑", 270, 40, 8, 45, 95, 280, 90, 65, 45),
   mk("mint", "Mint", "Soft mint × charcoal", "🌿", 160, 25, 10, 150, 92, 160, 75, 60, 175),
   mk("carbon", "Carbon", "Pure tech · matte black", "⬛", 220, 8, 8, 220, 92, 220, 70, 60, 200, { noNeon: true }),
+
+  // ─── v7.1 CASINO THEMES ───
+  mk("casinoVelvet",   "Casino Velvet",   "Deep purple felt + gold trim", "🟣", 280, 35, 8,  45, 92, 280, 65, 55, 45),
+  mk("casinoObsidian", "Casino Obsidian", "Pitch black + neon gold",      "⚫", 0,   0,  4,  45, 95, 45,  95, 55, 0),
+  mk("casinoGold",     "Casino Gold",     "Gilded high-roller suite",     "🥇", 35,  35, 7,  40, 95, 40,  95, 60, 25),
 ];
 
 export function getStoredTheme(): ThemeId {
