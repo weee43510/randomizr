@@ -135,7 +135,6 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
     } else if (lc.endsWith("party")) {
       celebrate("big");
       toast("🎉 PARTY!");
-      unlock("secret_party");
       setMatrixInput("");
     } else if (lc.endsWith("free")) {
       emojiRain("🦅", 25);
@@ -175,15 +174,17 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
           <TabsList className="mx-6 mt-3 flex flex-wrap h-auto justify-start gap-1 bg-muted/30">
             <TabsTrigger value="themes"><Palette className="w-3.5 h-3.5 mr-1.5" />Themes</TabsTrigger>
             <TabsTrigger value="device"><Monitor className="w-3.5 h-3.5 mr-1.5" />Device</TabsTrigger>
-            <TabsTrigger value="achievements"><Trophy className="w-3.5 h-3.5 mr-1.5" />Badges</TabsTrigger>
+            <TabsTrigger value="membership"><Crown className="w-3.5 h-3.5 mr-1.5" />Membership</TabsTrigger>
+            <TabsTrigger value="inventory"><Package className="w-3.5 h-3.5 mr-1.5" />Inventory</TabsTrigger>
             <TabsTrigger value="sounds"><Headphones className="w-3.5 h-3.5 mr-1.5" />Sounds</TabsTrigger>
             <TabsTrigger value="trivia"><Brain className="w-3.5 h-3.5 mr-1.5" />Trivia</TabsTrigger>
             <TabsTrigger value="roadmap"><Map className="w-3.5 h-3.5 mr-1.5" />Roadmap</TabsTrigger>
-            <TabsTrigger value="suggest"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />Suggest</TabsTrigger>
+            <TabsTrigger value="suggest"><MessageCircle className="w-3.5 h-3.5 mr-1.5" />Wall</TabsTrigger>
             <TabsTrigger value="notes"><Coffee className="w-3.5 h-3.5 mr-1.5" />Dev Notes</TabsTrigger>
             <TabsTrigger value="secrets"><KeyRound className="w-3.5 h-3.5 mr-1.5" />Secrets</TabsTrigger>
             <TabsTrigger value="about"><Info className="w-3.5 h-3.5 mr-1.5" />About</TabsTrigger>
           </TabsList>
+
 
           <div className="flex-1 overflow-y-auto px-6 pb-10 pt-5">
             {/* THEMES */}
@@ -248,12 +249,14 @@ export default function SettingsPanel({ soundEnabled, onSoundToggle, deviceType,
               <p className="text-[11px] text-muted-foreground">Switching here is non-destructive — your data stays.</p>
             </TabsContent>
 
-            <TabsContent value="achievements" className="max-w-5xl mx-auto"><AchievementsPanel /></TabsContent>
+            <TabsContent value="membership" className="max-w-5xl mx-auto"><MembershipPanel /></TabsContent>
+            <TabsContent value="inventory" className="max-w-4xl mx-auto"><CasinoInventoryPanel /></TabsContent>
             <TabsContent value="sounds" className="max-w-2xl mx-auto"><SoundStudio /></TabsContent>
             <TabsContent value="trivia" className="max-w-2xl mx-auto"><CustomTriviaPanel /></TabsContent>
             <TabsContent value="roadmap" className="max-w-6xl mx-auto"><Roadmap /></TabsContent>
-            <TabsContent value="suggest" className="max-w-2xl mx-auto"><SuggestionsPanel /></TabsContent>
+            <TabsContent value="suggest" className="max-w-3xl mx-auto"><SuggestionsPanel /></TabsContent>
             <TabsContent value="notes" className="max-w-2xl mx-auto"><DevNotesPanel /></TabsContent>
+
 
             {/* SECRETS */}
             <TabsContent value="secrets" className="space-y-5 max-w-2xl mx-auto">
