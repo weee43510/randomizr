@@ -19,11 +19,12 @@ interface Props {
   soundEnabled: boolean;
   onSoundToggle: (v: boolean) => void;
   onDeviceChange: (d: DeviceType) => void;
+  onPickExclusive?: (gameId: string) => void;
 }
 
 export default function AppSidebar({
   active, onSelect, collapsed, onToggle, deviceType, mobileOpen, onMobileToggle,
-  soundEnabled, onSoundToggle, onDeviceChange,
+  soundEnabled, onSoundToggle, onDeviceChange, onPickExclusive,
 }: Props) {
   const [search, setSearch] = useState("");
   const isMobile = deviceType === "mobile";
