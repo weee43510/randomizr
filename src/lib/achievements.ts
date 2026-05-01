@@ -89,14 +89,16 @@ export function unlock(id: string): boolean {
 }
 
 /**
- * 🎨 TOOL TRACKING (FROZEN)
+ * 🎨 TOOL TRACKING (kept active — used by Dashboard for "Recently used")
  */
 export function trackToolUsage(toolId: string) {
-  if (ACHIEVEMENTS_DISABLED) return;
-
   const used = loadFromStorage<Record<string, number>>("tools_used", {});
   used[toolId] = (used[toolId] || 0) + 1;
   saveToStorage("tools_used", used);
+}
+
+export function getToolUsage(): Record<string, number> {
+  return loadFromStorage<Record<string, number>>("tools_used", {});
 }
 
 /**
